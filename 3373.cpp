@@ -6,7 +6,7 @@ using ll=long long;
 ll tree[MAXN*4];
 ll mark[MAXN*4];
 ll kram[MAXN*4];
-ll a[MAXN];
+ll a[MAXN+5];
 int pp;
 void build(int p,int cl,int cr){
     kram[p]=1;
@@ -28,7 +28,7 @@ void pushdown(int p,int len){
     mark[p*2]%=pp;
     kram[p*2+1]*=kram[p];
     kram[p*2+1]%=pp;
-    mark[p*2+1]=mark[p*2]*kram[p]+mark[p];
+    mark[p*2+1]=mark[p*2+1]*kram[p]+mark[p];
     mark[p*2+1]%=pp;
     tree[p*2+1]=tree[p*2+1]*kram[p]+mark[p]*(len/2);
     tree[p*2+1]%=pp;
@@ -101,9 +101,10 @@ int main()
             cin>>x>>y;
             ll ans=0;
             ask(x,y,1,n,1,ans);
-            arr.push_back(ans);
+            cout<<ans<<endl;
+            //arr.push_back(ans);
         }
     }
-    for(auto& aaa:arr)cout<<aaa<<endl;
+    //for(auto& aaa:arr)cout<<aaa<<endl;
     return 0;
 }
