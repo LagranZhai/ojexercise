@@ -1,0 +1,4 @@
+3
+#define a b b b b b b
+#define c b b b b b b
+a;c;a

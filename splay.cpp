@@ -123,15 +123,15 @@ void del(int v){
 	}
 	else{
 		int cur=rt;
-		rt=pre(v);
+		pre(v);
 		fa[ch[cur][1]]=rt,ch[rt][1]=ch[cur][1];
 		clean(cur),upsiz(rt);
 	}
 }
 int main(){
 	ios::sync_with_stdio(false);
-	//freopen("P3369_6.in","r",stdin);
-	//freopen("P3369.out","w",stdout);
+	freopen("P3369_6.in","r",stdin);
+	freopen("P3369.out","w",stdout);
 	int n=0;
 	cin>>n;
 	int opt,x;
