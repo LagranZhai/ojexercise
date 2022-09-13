@@ -1,0 +1,13 @@
+10
+qabqks
+vimbirqy
+cflwvxtp
+klljfj
+ab
+nkeiid
+fkypjfev
+yvgp
+evdhs
+xaizql
+qabqksatffqpjomzstjabfklljfjqevdhsqabqkscflwvxtpeevdhsmzonkeiid
+0
