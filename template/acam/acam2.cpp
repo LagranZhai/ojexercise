@@ -41,16 +41,12 @@ void acam(){
 void query(string &s){
 	int p=0;
 	for(auto c:s){
-		p=ch[p][c-'a'];
-		int q=p; 
-		if(cnt[q]){
-			++num[q];
-		}
+		p=ch[p][c-'a']; 
+		++num[p];
 	}
 }
 int main(){
 	ios::sync_with_stdio(false);
-	//freopen("P3796_3.in","r",stdin);
 	int n=0;	
 		cin>>n;
 		for(int i=0;i<n;i++){
@@ -61,16 +57,15 @@ int main(){
 		acam();
 		cin>>t;
 		query(t);
+		queue<int> q;
 		for(int i=1;i<=tot;i++){
-//			if(!in[i]){
-				int p=i,temp=num[p];
-//				tag[fail[p]]+=num[p];
-//				p=fail[p];
-				while(fail[p]){
-					num[fail[p]]+=temp;
-					p=fail[p];
-				}
-//			}
+			if(!in[i])q.push(i);
+		}
+		while(!q.empty()){
+			int p=q.front();q.pop();
+			num[fail[p]]+=num[p];
+			in[fail[p]]--;
+			if(!in[fail[p]])q.push(fail[p]);
 		}
 		for(int i=0;i<n;i++){
 			cout<<num[jump[i]]<<"\n";
