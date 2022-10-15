@@ -4,8 +4,6 @@
 //https://www.luogu.com.cn/problem/P3371
 
 constexpr int MAXN = int(1e4+1), MAXM = int(5e5+1);
-
-//使用链式前向星存图
 int head[MAXN], to[MAXM], next[MAXM], weight[MAXM], eid;
 inline void addedge(int u, int v, int w) { to[++eid] = v; weight[eid] = w; next[eid] = head[u]; head[u] = eid; }
 
@@ -22,12 +20,16 @@ void spfa(int n, int s) {
     isinq[s] = true;
 
     while (!q.empty()) {
-        int u = q.front(); q.pop_front(); isinq[u] = false;
+        int u = q.front(); q.pop_front();
+        isinq[u] = false;
         for (int ed = head[u]; ed; ed = next[ed]) {
-            if (0LL + dis[u] + weight[ed] < dis[to[ed]]) {
-                dis[to[ed]] = dis[u] + weight[ed];
-                if (!isinq[to[ed]])
-                    q.push_back(to[ed]), isinq[to[ed]] = true;
+            int v = to[ed];
+            //一定要松弛
+            if (0LL + dis[u] + weight[ed] < dis[v]) {
+                dis[v] = dis[u] + weight[ed];
+                //不一定入队
+                if (!isinq[v])
+                    q.push_back(v), isinq[v] = true;
             }
         }
     }
