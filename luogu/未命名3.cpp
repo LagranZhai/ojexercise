@@ -2,7 +2,7 @@
 using namespace std;
 const int maxn=5e3+5;
 long long dp[maxn];
-int f[maxn],n,siz[maxn],tag[maxn];
+int h[maxn],n,siz[maxn],tag[maxn];
 vector<int> tree[maxn];
 int dfs(int p){
 	if(tag[p]==1)return -1;
