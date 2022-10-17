@@ -5,7 +5,7 @@
 using namespace std;
 const int maxn=1e6+10;
 const int p=19930726;
-int n,d[maxn],m;
+int n,d[maxn],m=0;
 long long k,ans=1;
 long long cnt[maxn];
 //priority_queue<int> q; 
@@ -39,7 +39,7 @@ void manacher(string &s){
 long long fastpow(int i,long long t){
 	long long a=1,b=i;
 	while(t>0){
-		if(t|0)a=a*b%p;
+		if(t&1)a=a*b%p;
 		t>>=1;
 		b=b*b%p;
 	}
@@ -51,16 +51,24 @@ int main(){
 	manacher(s);
 	long long t=0;
 	for(int i=m;i>0;i--){
+        if(i%2==0)continue;
+        //cout<<"i="<<i<<" ";
 		t+=cnt[i];
 		if(k>t){
 			ans=(ans*fastpow(i,t))%p;
+            //cout<<"ans="<<ans<<" ";
 			k-=t;
 		}
 		else{
+            //cout<<k<<" ";
 			ans=(ans*fastpow(i,k))%p;
+            //cout<<"ans="<<ans<<" ";
 			break;
 		}
+        //cout<<"ans="<<ans<<" ";
 	}
+    //cout<<m<<endl;
+    //for(int i=m;i>0;i--)cout<<cnt[i]<<" ";
 	cout<<ans<<endl;
 	return 0;
 }
