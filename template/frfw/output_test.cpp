@@ -57,6 +57,6 @@ int main() {
     }
 
     auto te = clock();
-    fprintf(stderr, "used time: %ld.%03ld\n", (te - ts) / 1000, (te - ts) % 1000);
+    fprintf(stderr, "used time: %lf\n", 1.0 * (te - ts) / CLOCKS_PER_SEC);
     return 0;
 }
