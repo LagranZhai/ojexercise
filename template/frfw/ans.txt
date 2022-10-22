@@ -1,0 +1,7 @@
+cin 13.431
+scanf 7.478
+frc 3.676
+frcpp 7.686
+frcppfalse 1.746
+cinfalse 2.166
+frcfalse 3.682
