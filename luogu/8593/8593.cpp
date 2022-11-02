@@ -4,6 +4,7 @@ const int maxn=5e5+5;
 int n,m,cnt=0;
 int x[maxn],y[maxn],v[maxn],a[maxn],p[maxn];
 vector<int> h[maxn];
+double e[maxn];
 unordered_map<int,int> mp;
 int b[maxn];
 long long ans;
@@ -40,6 +41,7 @@ int main(){
 		x[i]=fr<int>();
 		y[i]=fr<int>();
 		v[i]=fr<int>();
+        e[i]=(double)x[i]+(double)v[i]*sqrt(2.0*(double)y[i]/9.8);
 		if(mp.find(y[i])==mp.end()){
 			mp[y[i]]=++cnt;
 			h[cnt].push_back(i);
@@ -51,8 +53,12 @@ int main(){
     int cur;
     for(int i=1;i<=cnt;i++){
         cur=h[i].size();
-        sort(h[i].begin(),h[i].end(),[](const auto &a,const auto &b){return x[a]<=x[b]};);
-
+        sort(h[i].begin(),h[i].end(),[](const auto &a,const auto &b){return e[a]>=e[b]};);
+        for(int i=0;i<cur;i++){
+            add(s[h[i]]);
+            p[i]+=query(s[h[i]]-1);
+        }
+        memset()
     }
 	for(int i=1;i<=n;i++){
 		a[i]=fr<int>();
