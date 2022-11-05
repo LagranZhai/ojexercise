@@ -15,16 +15,16 @@ void init(){
 	}
 	for(int s=1;s<=logn[n];s++){
 		for(int i=1;i+(1<<s)-1<=n;i++){
-			st1[i][s]=max(st1[i][s-1],st1[i+(1<<(s-1))-1][s-1]);
-			st4[i][s]=min(st4[i][s-1],st4[i+(1<<(s-1))-1][s-1]);
-			st2[i][s]=min(st2[i][s-1],st2[i+(1<<(s-1))-1][s-1]);
-			st3[i][s]=max(st3[i][s-1],st3[i+(1<<(s-1))-1][s-1]);
+			st1[i][s]=max(st1[i][s-1],st1[i+(1<<(s-1))][s-1]);
+			st4[i][s]=min(st4[i][s-1],st4[i+(1<<(s-1))][s-1]);
+			st2[i][s]=min(st2[i][s-1],st2[i+(1<<(s-1))][s-1]);
+			st3[i][s]=max(st3[i][s-1],st3[i+(1<<(s-1))][s-1]);
 		}
 	}
 	for(int s=1;s<=logn[m];s++){
 		for(int i=1;i+(1<<s)-1<=m;i++){
-			st5[i][s]=max(st5[i][s-1],st5[i+(1<<(s-1))-1][s-1]);
-			st6[i][s]=min(st6[i][s-1],st6[i+(1<<(s-1))-1][s-1]);
+			st5[i][s]=max(st5[i][s-1],st5[i+(1<<(s-1))][s-1]);
+			st6[i][s]=min(st6[i][s-1],st6[i+(1<<(s-1))][s-1]);
 		}
 	}
 }
@@ -36,6 +36,7 @@ int query(int l,int r,int st[][18]){
 long long solve(){
 	int q1=query(l1,r1,st1),q2=query(l1,r1,st2),q3=query(l1,r1,st3),q4=query(l1,r1,st4),
 		q5=query(l2,r2,st5),q6=query(l2,r2,st6);
+    //cout<<'\n'<<q1<<' '<<q2<<' '<<q3<<' '<<q4<<' '<<q5<<' '<<q6<<'\n';
 	if(q6>=0){
 		if(q1>=0)return 1ll*q6*q1;
 		if(q1<0)return 1ll*q5*q1;
@@ -43,8 +44,8 @@ long long solve(){
 	else{
 		if(q1<0){
 			if(q5>=0){
-                if(q4>=0)return 1ll*q5*q1;
-            }return 1ll*q5*q1;
+                return 1ll*q5*q1;
+            }
 			if(q5<0)return 1ll*q4*q5;
 		}
 		else{
@@ -75,10 +76,12 @@ int main(){
 			st2[i][0]=1<<30;st3[i][0]=st1[i][0];
 		}
 	}
+    //for(int i=1;i<=n;i++)cout<<st3[i][0];
 	for(int i=1;i<=m;i++){
 		cin>>st5[i][0];
 		st6[i][0]=st5[i][0];
 	}
+    init();
 	while(q--){
 		cin>>l1>>r1>>l2>>r2;
 		cout<<solve()<<'\n';
