@@ -11,5 +11,5 @@
   + 使用主席树
   + 离线使用树状数组 https://zhuanlan.zhihu.com/p/579489310
 + 静态区间不同数
-  + 使用主席树
-  
+  + 使用主席树（）
+  + https://www.luogu.com.cn/problem/P1972
