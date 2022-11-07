@@ -41,14 +41,14 @@ int main(){
     sort(b.begin(),b.end());
     //cout<<"w";
     b.erase(unique(b.begin(),b.end()),b.end());
-    for(int i:b)cout<<i<<' ';
+    //for(int i:b)cout<<i<<' ';
     int nn=b.size()+1;
     //cout<<"nn";
-    for(int i=1;i<=n;i++)update(1,n,root[i-1],root[i],getid(a[i]));
+    for(int i=1;i<=n;i++)update(1,nn,root[i-1],root[i],getid(a[i]));
     int ll,rr,k;
     while(m--){
         cin>>ll>>rr>>k;
-        cout<<b[query(1,n,root[ll-1],root[rr],k)-1]<<'\n';
+        cout<<b[query(1,nn,root[ll-1],root[rr],k)-1]<<'\n';
     }
     return 0;
 }
