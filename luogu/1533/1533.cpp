@@ -17,18 +17,18 @@ void update(int cl,int cr,int pre,int &now,int p){
     hjt[now].sum++;
     if(cl==cr)return;
     int mid=(cl+cr)>>1;
-    if(p<=mid)update(cl,mid,hjt[pre].l,hjt[pre].l,p);
-    if(p>mid)update(mid+1,cr,hjt[pre].r,hjt[pre.r,p);
-    return;
+    if(p<=mid)update(cl,mid,hjt[pre].l,hjt[now].l,p);
+    else if(p>mid)update(mid+1,cr,hjt[pre].r,hjt[now].r,p);
+    //return;
 }
 int query(int cl,int cr,int pre,int now,int k){
     if(cl==cr)return cl;
     int mid=(cl+cr)>>1;
     if(k>hjt[hjt[now].l].sum-hjt[hjt[pre].l].sum){
         k-=hjt[hjt[now].l].sum-hjt[hjt[pre].l].sum;
-        update(mid+1,cr,hjt[pre].r,hjt[now].r,k);
+        return query(mid+1,cr,hjt[pre].r,hjt[now].r,k);
     }
-    else update(cl,mid,hjt[pre].l,hjt[now].l,k);
+    else return query(cl,mid,hjt[pre].l,hjt[now].l,k);
 }
 int main(){
     ios::sync_with_stdio(false);
@@ -41,12 +41,14 @@ int main(){
     sort(b.begin(),b.end());
     //cout<<"w";
     b.erase(unique(b.begin(),b.end()),b.end());
-    int nn=b.size();
-    cout<<"nn";
-    for(int i=1;i<=n;i++)update(1,nn,root[i-1],root[i],getid(a[i]));
-    int l,r,k;
+    for(int i:b)cout<<i<<' ';
+    int nn=b.size()+1;
+    //cout<<"nn";
+    for(int i=1;i<=n;i++)update(1,n,root[i-1],root[i],getid(a[i]));
+    int ll,rr,k;
     while(m--){
-        cin>>l>>r>>k;
-        cout<<b[query(1,nn,root[l-1],root[r],k)-1]<<'\n';
+        cin>>ll>>rr>>k;
+        cout<<b[query(1,n,root[ll-1],root[rr],k)-1]<<'\n';
     }
+    return 0;
 }
