@@ -2,3 +2,8 @@
 
 1. 必须保证自己定义的每一个函数都被调用，尤其是初始化函数。
 2. 确定是否需要开 `long long`。
+3. 两个int得到long long
+```cpp
+   long long c=1ll*a*b;
+   long long c=0ll+a+b;
+```
