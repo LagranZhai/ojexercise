@@ -1,9 +1,9 @@
 #include<iostream>
 #include<algorithm>
 using namespace std;
-const int maxn=5100;
-const int maxm=4e5+100;
-int cnt=0,n,m,fa[maxn];
+const int maxn=310;
+const int maxm=9e4+500;
+int n,m=0,fa[maxn];
 struct Edge{
 	int u,v,w;
 }edg[maxm];
@@ -20,7 +20,7 @@ int kruskal(){
 			ans+=edg[cur].w;
 			fa[fa[edg[cur].u]]=fa[edg[cur].v];
 			++num;
-			if(num==n-1)return ans;
+			if(num==n)return ans;
 		}
 		cur++;
 	}
@@ -28,11 +28,22 @@ int kruskal(){
 }
 int main(){
 	ios::sync_with_stdio(false);
-	cin>>n>>m;
+	cin>>n;
 	//int u,v,w;
 	for(int i=1;i<=n;i++)fa[i]=i;
-	for(int i=1;i<=m;i++){
-		cin>>edg[i].u>>edg[i].v>>edg[i].w;
+	for(int i=1;i<=n;i++){
+		++m;
+		edg[m].u=n+1;
+		edg[m].v=i;
+		cin>>edg[m].w;
+	}
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=n;j++){
+			m++;
+			edg[m].u=i;
+			edg[m].v=j;
+			cin>>edg[m].w;
+		}
 	}
 	int k=kruskal();
 	if(k<0)cout<<"orz\n";
