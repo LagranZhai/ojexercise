@@ -6,9 +6,9 @@ using namespace std;
 const int maxn=2e3;
 const int maxm=2e3;
 const double eps=1e-6;
-int n,m,t,cnt=0,score[maxn],times[maxn],head[maxn];
+int n,m,t,cnt=0,times[maxn],head[maxn];
 bool inq[maxn];
-double dis[maxn];
+double dis[maxn],score[maxn];
 struct Edge{
 	int to,nxt;
 	//long long w;
@@ -30,8 +30,8 @@ bool spfa(double t){
 		for(int e=head[cur];e;e=edg[e].nxt){
 			int vv=edg[e].to;
 			if(edg[e].o){
-				if(dis[vv]-dis[cur]*(edg[e].k-t)<eps){
-					dis[vv]=dis[cur]*(edg[e].k-t);
+				if(dis[vv]<dis[cur]*score[cur]*(edg[e].k-t)){
+					dis[vv]=dis[cur]*score[cur]*(edg[e].k-t);
 					if(!inq[vv]){
 						inq[vv]=1;
 						q.push(vv);
@@ -40,8 +40,8 @@ bool spfa(double t){
 				}
 			}
 			else{
-				if(dis[vv]-dis[cur]*1.0/(edg[e].k+t)<eps){
-					dis[vv]=dis[cur]*1.0/(edg[e].k+t);
+				if(dis[vv]<dis[cur]*score[cur]*1.0/(edg[e].k+t)){
+					dis[vv]=dis[cur]*score[cur]*1.0/(edg[e].k+t);
 					if(!inq[vv]){
 						inq[vv]=1;
 						q.push(vv);
@@ -61,7 +61,7 @@ int main(){
 	int u,v,kk;
 	int mk=-1;
 	for(int i=1;i<=m;i++){
-		cin>>opt>>u>>v>>kk;
+		cin>>opt>>v>>u>>kk;
 		mk=max(mk,kk);
 		edg[++cnt].to=v;
 		edg[cnt].k=kk;
@@ -74,7 +74,8 @@ int main(){
 			edg[cnt].o=0;
 		}
 	}
-	int C,x;
+	int C;
+	double x; 
 	for(int i=1;i<=s;i++){
 		cin>>C>>x;
 		score[C]=x;
@@ -86,9 +87,10 @@ int main(){
 //		head[n+1]=cnt;
 //	}
 	double l=0.0,r=mk,mid=(l+r)/2.0;
-	while(l+eps>r){
+	while(l+eps<=r){
 		mid=(l+r)/2.0;
-		if(!spfa(mid)){
+		bool a=spfa(mid);cout<<a<<endl;
+		if(a){		
 			l=mid;
 		}
 		else{
