@@ -1,6 +1,5 @@
 #include<iostream>
 using namespace std;
-//最多开20e8个int
 const int MAXN=10e5+5;
 int tot=0,rt=0;
 int fa[MAXN],ch[MAXN][2],siz[MAXN],cnt[MAXN];

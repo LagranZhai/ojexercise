@@ -2,7 +2,7 @@
 #include<algorithm>
 #include<iostream>
 using namespace std;
-const int maxn=10e5+5;
+const int maxn=1e6+5;
 int a[maxn],root[maxn];
 int cnt=0;
 vector<int> v;
