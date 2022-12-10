@@ -58,6 +58,7 @@ int main(){
         cin>>opt;
         if(opt=='Q'){
             cin>>x;
+			t=numeric_limits<ll>::min();
             ask(len-x+1,len,1,m,1,t);
 			cout<<t<<'\n';
         }
