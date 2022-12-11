@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include<iostream>
 using namespace std;
 const int maxn=2e5+5;
 double tree_sum[maxn*4];
@@ -8,8 +8,10 @@ double a[maxn];
 int n,m;
 inline void pushdown(int p,int len){
 	mark[p*2]+=mark[p];
+    tree_sqr[p*2]+=mark[p]*mark[p]*(double)(len-len/2)+2.0*mark[p]*tree_sum[p*2];
 	tree_sum[p*2]+=mark[p]*(len-len/2);
 	mark[p*2+1]+=mark[p];
+    tree_sqr[p*2+1]+=mark[p]*mark[p]*(double)(len/2)+2.0*mark[p]*tree_sum[p*2+1];
 	tree_sum[p*2+1]+=mark[p]*(len/2);
 	mark[p]=0;
 }
@@ -51,7 +53,9 @@ void ask_sqr(const int l,const int r,int cl,int cr,int p,double &ans){
 void update(const int l,const int r,int cl,int cr,int p,int d){
 	if(cl>=l&&cr<=r){
 		mark[p]+=d;
-		tree_sum[p]+=d*(cr-cl+1);
+		//tree_sum[p]+=d*(cr-cl+1);
+        tree_sqr[p]+=d*d*(double)(cr-cl+1)+2.0*d*tree_sum[p];
+        tree_sum[p]+=d*(cr-cl+1);
 		return;
 	}
 	int mid=cl+(cr-cl)/2;
@@ -60,6 +64,7 @@ void update(const int l,const int r,int cl,int cr,int p,int d){
 		if(l<=mid)update(l,r,cl,mid,p*2,d);
 		if(r>mid)update(l,r,mid+1,cr,p*2+1,d);
 		tree_sum[p]=tree_sum[p*2]+tree_sum[p*2+1];
+        tree_sqr[p]=tree_sqr[p*2]+tree_sqr[p    *2+1];
 	}
 }
 int main(){
@@ -69,18 +74,26 @@ int main(){
         cin>>a[i];
     }
     build(1,1,n);
-    int opt,x,y,d;
+    int opt,x,y;
+    double d;
     for(int i=0;i<m;i++){
         cin>>opt;
         if(opt==1){
             cin>>x>>y>>d;
             update(x,y,1,n,1,d);
         }
-        else{
+        else if(opt==2){
             cin>>x>>y;
             double ans=0;
-            ask(x,y,1,n,1,ans);
-            cout<<ans<<endl;
+            ask_sum(x,y,1,n,1,ans);
+            cout<<ans/(double)((y-x+1))<<endl;
+        }
+        else{
+            cin>>x>>y;
+            double ans1=0,ans2=0;
+            ask_sum(x,y,1,n,1,ans1);
+            ask_sqr(x,y,1,n,1,ans2);
+            cout<< -ans1*ans1/(double)((y-x+1)*(y-x+1))+ans2/(double)(y-x+1)<<endl;
         }
     }
 	cout.flush();
