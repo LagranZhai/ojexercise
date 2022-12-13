@@ -1,5 +1,4 @@
-#include <iostream>
-#include <cstring>
+#include<bits/stdc++.h>
 using namespace std;
 const int maxn = 10e6 + 6;
 int fail[maxn];
@@ -18,34 +17,24 @@ void getfail(char *P){
         fail[i] = j;
     }
 }
-void kmp(char *P, char *T)
-{
-    int m = strlen(P);
-    int n = strlen(T);
-    int j = -1;
-    for (int i = 0; i < n; i++)
-    {
-        while (j >= 0 && P[j + 1] != T[i])
-            j = fail[j];
-        if (P[j + 1] == T[i])
-        {
-            j++;
-            if (j + 1 == m)
-                cout << (i - m + 2) << endl;
-        }
-    }
+void kmp(string &s,string &t){
+	int m=s.size();
+	int n=t.size();
+	int j=-1;
+	for(int i=0;i<n;i++){
+		while(j>=0&&s[j+1]!=t[i])j=fail[j];
+		if(s[j+1]==t[i])j++;
+		if(j==m-1)cout<<i-m+2<<'\n';
+	}
 }
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin >> T >> P;
-    getfail(P);
-    kmp(P, T);
-    int i = 0;
-    int l = strlen(P);
-    while (i < l)
-    {
-        cout << fail[i++] + 1 << " ";
-    }
-    return 0;
+int main(){
+	ios::sync_with_stdio(false);
+	cin>>t>>s;
+	getfail(s);
+	kmp(s,t);
+	for(int i=0;i<s.size();i++){
+		cout<<fail[i]+1<<' ';
+	}
+	cout.flush();
+	return 0;
 }
