@@ -5,8 +5,7 @@ const int maxn = 10e6 + 6;
 int fail[maxn];
 char T[maxn], P[maxn];
 string ans;
-void getfail(char *P)
-{
+void getfail(char *P){
     int m = strlen(P);
     fail[0] = -1;
     for (int i = 1; i < m; i++)
