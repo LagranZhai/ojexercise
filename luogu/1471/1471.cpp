@@ -1,4 +1,4 @@
-#include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
 const int maxn=2e5+5;
 double tree_sum[maxn*4];
@@ -8,10 +8,10 @@ double a[maxn];
 int n,m;
 inline void pushdown(int p,int len){
 	mark[p*2]+=mark[p];
-    tree_sqr[p*2]+=mark[p]*mark[p]*(double)(len-len/2)+2.0*mark[p]*tree_sum[p*2];
+    tree_sqr[p*2]+=mark[p]*mark[p]*(len-len/2)+2*mark[p]*tree_sum[p*2];
 	tree_sum[p*2]+=mark[p]*(len-len/2);
 	mark[p*2+1]+=mark[p];
-    tree_sqr[p*2+1]+=mark[p]*mark[p]*(double)(len/2)+2.0*mark[p]*tree_sum[p*2+1];
+    tree_sqr[p*2+1]+=mark[p]*mark[p]*(len/2)+2*mark[p]*tree_sum[p*2+1];
 	tree_sum[p*2+1]+=mark[p]*(len/2);
 	mark[p]=0;
 }
@@ -40,7 +40,7 @@ void ask_sum(const int l,const int r,int cl,int cr,int p,double &ans){
 }
 void ask_sqr(const int l,const int r,int cl,int cr,int p,double &ans){
 	if(cl>=l&&cr<=r){
-		ans+=tree_sum[p];
+		ans+=tree_sqr[p];
 		return;
 	}
 	int mid=cl+(cr-cl)/2;
@@ -50,11 +50,11 @@ void ask_sqr(const int l,const int r,int cl,int cr,int p,double &ans){
 		if(r>mid)ask_sqr(l,r,mid+1,cr,p*2+1,ans);
 	}
 }
-void update(const int l,const int r,int cl,int cr,int p,int d){
+void update(const int l,const int r,int cl,int cr,int p,double d){
 	if(cl>=l&&cr<=r){
 		mark[p]+=d;
 		//tree_sum[p]+=d*(cr-cl+1);
-        tree_sqr[p]+=d*d*(double)(cr-cl+1)+2.0*d*tree_sum[p];
+        tree_sqr[p]+=d*d*(cr-cl+1)+2*d*tree_sum[p];
         tree_sum[p]+=d*(cr-cl+1);
 		return;
 	}
@@ -64,7 +64,7 @@ void update(const int l,const int r,int cl,int cr,int p,int d){
 		if(l<=mid)update(l,r,cl,mid,p*2,d);
 		if(r>mid)update(l,r,mid+1,cr,p*2+1,d);
 		tree_sum[p]=tree_sum[p*2]+tree_sum[p*2+1];
-        tree_sqr[p]=tree_sqr[p*2]+tree_sqr[p    *2+1];
+        tree_sqr[p]=tree_sqr[p*2]+tree_sqr[p*2+1];
 	}
 }
 int main(){
@@ -86,14 +86,16 @@ int main(){
             cin>>x>>y;
             double ans=0;
             ask_sum(x,y,1,n,1,ans);
-            cout<<ans/(double)((y-x+1))<<endl;
+            cout<<fixed<<setprecision(4)<<ans/(y-x+1)<<endl;
         }
         else{
             cin>>x>>y;
-            double ans1=0,ans2=0;
+            double ans1=0,ans2=0,len=y-x+1;
             ask_sum(x,y,1,n,1,ans1);
             ask_sqr(x,y,1,n,1,ans2);
-            cout<< -ans1*ans1/(double)((y-x+1)*(y-x+1))+ans2/(double)(y-x+1)<<endl;
+			ans1=ans1/len;ans2=ans2/len;
+            cout<<fixed<<setprecision(4)<<ans2-ans1*ans1<<endl;
+			//cout<<ans2<<endl;
         }
     }
 	cout.flush();
