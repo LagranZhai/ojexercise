@@ -94,9 +94,9 @@ int main(){
            if(e!=cnt-1)c.martix[cnt][e]=1;
        }
     }
-    pm(c);
-    Martix res=mpow(c,1);
-    pm(res);
+    //pm(c);
+    Martix res=mpow(c,t-1);
+    //pm(res);
     int ans=0;
     for(int e=head[a][0];e;e=nxt[e][0]){
         for(int u=head[b][1];u;u=nxt[u][1]){
