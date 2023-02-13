@@ -24,9 +24,13 @@ int main(){
         for(int j=n;j>=w[i];j--){
             dp[j]=max(dp[j],dp[j-w[i]]+val[i]);
             if(!a[i].empty()){
-                if(j-w[a[i][0]]-w[i]>=0)
-                    dp[j]=max(dp[j],dp[j-w[a[i][0]]-w[i]]+val[i]+val[a[i][0]]);
-                if((int)a[i].size()>1){
+                if(a[i].size()==1){
+                    if(j-w[a[i][0]]-w[i]>=0)
+                        dp[j]=max(dp[j],dp[j-w[a[i][0]]-w[i]]+val[i]+val[a[i][0]]);
+                }
+                if(a[i].size()==2){
+                    if(j-w[a[i][0]]-w[i]>=0)
+                        dp[j]=max(dp[j],dp[j-w[a[i][0]]-w[i]]+val[i]+val[a[i][0]]);
                     if(j-w[a[i][1]]-w[i]>=0)
                         dp[j]=max(dp[j],dp[j-w[a[i][1]]-w[i]]+val[i]+val[a[i][1]]);
                     if(j-w[a[i][0]]-w[a[i][1]]-w[i]>=0)
