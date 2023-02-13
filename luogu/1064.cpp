@@ -21,7 +21,7 @@ int main(){
     }
     for(int i=1;i<=m;i++){
         if(!mi[i])continue;
-        for(int j=n;j>w[i];j--){
+        for(int j=n;j>=w[i];j--){
             dp[j]=max(dp[j],dp[j-w[i]]+val[i]);
             if(!a[i].empty()){
                 if(j-w[a[i][0]]-w[i]>=0)
