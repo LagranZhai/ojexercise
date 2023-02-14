@@ -34,7 +34,7 @@ int main(){
                     if(j-w[a[i][1]]-w[i]>=0)
                         dp[j]=max(dp[j],dp[j-w[a[i][1]]-w[i]]+val[i]+val[a[i][1]]);
                     if(j-w[a[i][0]]-w[a[i][1]]-w[i]>=0)
-                        dp[j]=max(dp[j],dp[j-w[a[i][0]-w[a[i][1]]]-w[i]]+val[i]+val[a[i][0]]+val[a[i][1]]);
+                        dp[j]=max(dp[j],dp[j-w[a[i][0]]-w[a[i][1]]-w[i]]+val[i]+val[a[i][0]]+val[a[i][1]]);
                 }
             }
         }
