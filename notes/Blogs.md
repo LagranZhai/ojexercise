@@ -1,2 +1,5 @@
 网络上的信息竞赛相关的优质博客的收集。
 非常感谢各位博主的写作，如有不妥之处请联系我删除。
+
+# Link-Cut-Tree
+https://www.cnblogs.com/flashhu/p/8324551.html
