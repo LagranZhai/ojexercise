@@ -3,3 +3,4 @@
 
 # Link-Cut-Tree
 https://www.cnblogs.com/flashhu/p/8324551.html
+https://wk.baidu.com/view/75906f160b4e767f5acfcedb?pcf=2&bfetype=new&_wkts_=1677019299104
