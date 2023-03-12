@@ -27,10 +27,10 @@ void fenjie(int x){
 	}
 }
 int print2(int d){
-	if(d==n){
+	if(d==q.size()){
 		int x=1;
 		now.push_back(1);
-		for(int i=1;i<q[n];i++){
+		for(int i=1;i<=q[q.size()-1];i++){
 			x*=p;
 			now.push_back(x);
 		}
@@ -57,8 +57,8 @@ void print1(){
 	for(int i=1;i<=a)
 }
 void print(){
-	cout<<1<<' ';
-	
+	cout<<1<<' ';i
+    int ss=print2(2);
 	for(int i=0;i<=q[0];i++){
 		
 	}
