@@ -13,7 +13,7 @@ void init(){
 int sti(string s){
     int _t=0;
     for(int i=0;i<s.size();i++){
-        
+        _t+=ab[s[i]];
     }
 }
 int main(){
