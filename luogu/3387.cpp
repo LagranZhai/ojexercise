@@ -1,55 +1,27 @@
-#include<iostream>
-#include<vector>
-//#include<queue>
+#include<bits/stdc++.h>
 using namespace std;
-const int MAXN=1e5+5;
-int n,m;
-int a[MAXN],fa[MAXN];
-int ffind(int i){
-	return fa[i]=((fa[i]==i)?i:ffind(fa[i]));
-}
-vector<int> t[MAXN];
-int status[MAXN];
-int finda(int i){
-	i=ffind(i);
-    if(status[i]==1)return a[i];
-    status[i]=2;
-    a[i]=i;
-    //int fflag=0;
-    for(int j=0;j<t[i].size();j++){
-    	j=ffind(j);
-        if(status[j]==0){
-            //if(finda(j))fflag=1;
-            a[i]+=finda(j);
-            if(fa[j]!=j)fa[ffind(j)]=ffind(i);
-        }
-        else if(status[j]==1){
-            a[i]+=finda(j);
-        }
-        else if(status[j]==2){
-            //fflag=1;
-            fa[i]=ffind(j);
-        }
-    }
-    //if(fflag==0){
-    status[i]=1;
-    return a[i];
+const int maxn=1e3,maxm=1e5;
+int head[maxn*2],cnt=0;
+int a[maxn*2];
+struct Edge{
+    int u,v,nxt;
+}edge[maxm*2];
+void addedge(int u,int v){
+    edge[++cnt].u=u;
+    edge[cnt].v=v;
+    edge[cnt].nxt=head[u];
+    head[u]=cnt;
 }
 int main(){
     ios::sync_with_stdio(false);
+    int n,m;
     cin>>n>>m;
-    //init
     for(int i=1;i<=n;i++){
-    	fa[i]=i;
-	}
-    int ss,ee;
-    for(int i=0;i<m;i++){
-        cin>>ss>>ee;
-        t[ss].push_back(ee);
+        cin>>a[i];
     }
-    for(int i=1;i<=n;i++){
-        cout<<finda(i)<<" ";
+    int u,v;
+    for(int i=1;i<=m;i++){
+        addedge(u,v);
     }
-
     return 0;
 }
