@@ -6,8 +6,8 @@ string s,t;
 void getfail(string &s){
 	int m=s.size();
 	fail[0]=-1;
+	int j=-1;
 	for(int i=1;i<m;i++){
-		int j=fail[i-1];
 		while(j>=0&&s[j+1]!=s[i])j=fail[j];
 		if(s[j+1]==s[i])j++;
 		fail[i]=j;

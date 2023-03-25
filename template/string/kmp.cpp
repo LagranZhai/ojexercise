@@ -1,21 +1,18 @@
+//luogu3375
 #include<bits/stdc++.h>
 using namespace std;
-const int maxn = 10e6 + 6;
-int fail[maxn];
-char T[maxn], P[maxn];
-string ans;
-void getfail(char *P){
-    int m = strlen(P);
-    fail[0] = -1;
-    for (int i = 1; i < m; i++)
-    {
-        int j = fail[i - 1];
-        while (j >= 0 && P[j + 1] != P[i])
-            j = fail[j];
-        if (P[j + 1] == P[i])
-            j++;
-        fail[i] = j;
-    }
+const int maxn=1e6+6;
+int n,fail[maxn];
+string s,t;
+void getfail(string &s){
+	int m=s.size();
+	fail[0]=-1;
+	int j=-1;
+	for(int i=1;i<m;i++){
+		while(j>=0&&s[j+1]!=s[i])j=fail[j];
+		if(s[j+1]==s[i])j++;
+		fail[i]=j;
+	}
 }
 void kmp(string &s,string &t){
 	int m=s.size();
