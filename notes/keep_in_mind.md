@@ -15,4 +15,17 @@
 7. 读入一整行用 `std::getline(cin, str);`，其中 `str` 是 C++ 字符串。
 8. 头文件位置：`/lib/gcc/.../.../include/c++`。
 9. $a^b \equiv (a \bmod p)^b \not\equiv a^{b\ \bmod\ p} \pmod p$。指数不能取模。
-10. `freopen` 的使用方法：`freopen("airport.in", "r", stdin); freopen("airport.out", "w", stdout);`，在结尾 `fclose(stdin); fclose(stdout);`。
+10. `freopen` 的使用方法：`freopen("airport.in", "r", stdin); freopen("airport.out", "w", stdout);`，在结尾 `fclose(stdin); fclose(stdout);`。  
+11. 用`fill`函数给一维赋值：
+```cpp
+int num[maxn];  
+fill(num,num+maxn,-1);
+```  
+或者`fill(num,num+n,-1);`指定数组长度赋值  
+用fill给二维数组赋值：  
+```cpp
+int num[maxn][maxn];  
+fill(num[0],num[0]+maxn*maxn,-1);  
+//值得注意的是，给二维数组赋值时，首地址必须写num[0]。
+```
+
