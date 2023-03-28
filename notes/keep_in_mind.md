@@ -27,5 +27,13 @@ fill(num,num+maxn,-1);
 int num[maxn][maxn];  
 fill(num[0],num[0]+maxn*maxn,-1);  
 //值得注意的是，给二维数组赋值时，首地址必须写num[0]。
-```
+```  
 
+11. 拷贝`std::copy(start, end, std::back_inserter(container));`
+12. 确保数组开的足够大不会溢出，但也不要mle
+13. 容器初始化时可以先`.resize()`,否则谨慎使用下标访问
+14. 在noilinux上编译
+```
+g++ name.cpp -Wall -Wextra -std=c++14 -O2 -fsanitize=address,undefined -g -o name  
+g++ name.cpp -Wall -Wextra -std=c++14 -O2 -g -o name
+```
