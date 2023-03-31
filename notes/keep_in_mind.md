@@ -36,4 +36,9 @@ fill(num[0],num[0]+maxn*maxn,-1);
 ```
 g++ name.cpp -Wall -Wextra -std=c++14 -O2 -fsanitize=address,undefined -g -o name  
 g++ name.cpp -Wall -Wextra -std=c++14 -O2 -g -o name
+```  
+15. 保留小数点后两位
+```cpp
+	#include <iomanip> //不要忘了头文件
+	cout<<setiosflags(ios::fixed)<<setprecision(2);
 ```
