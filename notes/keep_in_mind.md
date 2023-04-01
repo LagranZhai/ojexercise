@@ -34,8 +34,8 @@ fill(num[0],num[0]+maxn*maxn,-1);
 13. 容器初始化时可以先`.resize()`,否则谨慎使用下标访问
 14. 在noilinux上编译
 ```
-g++ name.cpp -Wall -Wextra -std=c++14 -O2 -fsanitize=address,undefined -g -o name  
-g++ name.cpp -Wall -Wextra -std=c++14 -O2 -g -o name
+g++ name.cpp -Wall -Wextra -std=c++14 -O2 -fsanitize=address,undefined -Wl,--stack=536870912 -g -o name  
+g++ name.cpp -Wall -Wextra -std=c++14 -O2 -Wl,--stack=536870912 -g -o name
 ```  
 15. 保留小数点后两位
 ```cpp
