@@ -42,3 +42,5 @@ g++ name.cpp -Wall -Wextra -std=c++14 -O2 -Wl,--stack=536870912 -g -o name
 	#include <iomanip> //不要忘了头文件
 	cout<<fixed<<setprecision(2);
 ```
+
+16. 一定要在最后调用 `cout.flush()`。
