@@ -1,9 +1,10 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<algorithm>
 using namespace std;
 const int maxn=2e5,P=51061;
 int n,q;
 int a[maxn+10],tag1[maxn+10],tag2[maxn+10];
-int ch[maxn+10][2],fa[maxn+10],sum[maxn+10];
+int ch[maxn+10][2],fa[maxn+10],sum[maxn+10],siz[maxn];
 bool tag[maxn+10];
 inline int chk(int x){
     if(ch[fa[x]][1]==x)return 1;
@@ -12,6 +13,14 @@ inline int chk(int x){
 }
 inline void upsum(int x){
     sum[x]=((sum[ch[x][0]]+sum[ch[x][1]])%P+a[x])%P;
+    siz[x]=siz[ch[x][0]]+siz[ch[x][1]]+1;
+}
+inline void updatetag(int x,int mul,int add){
+    sum[x]=(1ll*sum[x]*mul%P+1ll*add*siz[x]%P)%P;
+    a[x]=(1ll*a[x]*mul%P+add)%P;
+    tag2[x]=1ll*tag2[x]*mul%P;
+    tag1[x]=1ll*tag1[x]*mul%P;
+    tag1[x]=(0ll+tag1[x]+add)%P;
 }
 inline void pushdown(int x){
     if(tag[x]){
@@ -20,14 +29,12 @@ inline void pushdown(int x){
         tag[ch[x][1]]^=1;
         tag[x]=0;
     }
-    sum[x]=(1ll*sum[x]*tag2[x]%P+tag1[x])%P;
-    a[x]=(1ll*a[x]*tag2[x]%P+tag1[x])%P;
-    tag2[ch[x][0]]=1ll*tag2[ch[x][0]]*tag2[x]%P;
-    tag2[ch[x][1]]=1ll*tag2[ch[x][1]]*tag2[x]%P;
-    tag1[ch[x][0]]=1ll*tag1[ch[x][0]]*tag2[x]%P;
-    tag1[ch[x][1]]=1ll*tag1[ch[x][1]]*tag2[x]%P;
-    tag1[ch[x][0]]=(tag1[ch[x][0]]+tag1[x])%P;
-    tag1[ch[x][1]]=(tag1[ch[x][1]]+tag1[x])%P;
+    if(ch[x][0]){
+        updatetag(ch[x][0],tag2[x],tag1[x]);
+    }
+    if(ch[x][1]){
+        updatetag(ch[x][1],tag2[x],tag1[x]);
+    }
     tag1[x]=0;tag2[x]=1;
 }
 void reverse_pushdown(int x){
@@ -100,6 +107,9 @@ int main(){
     int x,y;
     for(int i=1;i<=n;i++){
         tag2[i]=1;
+        a[i]=1;
+        //sum[i]=1;
+        //siz[i]=1;
     }
     for(int i=1;i<=n-1;i++){
         cin>>x>>y;
@@ -113,7 +123,7 @@ int main(){
         if(opt=='+'){
             cin>>x>>y>>b;
             split(x,y);
-            tag1[y]=(tag1[y]+b)%P;
+            updatetag(y,1,b);
             pushdown(y);
             //cout<<"a"<<endl;
         }
@@ -125,12 +135,13 @@ int main(){
         else if(opt=='*'){
             cin>>x>>y>>b;
             split(x,y);
-            tag2[y]=1ll*tag2[y]*b%P;
+            updatetag(y,b,0);
             pushdown(y);
         }
         else if(opt=='/'){
             cin>>x>>y;
             split(x,y);
+            pushdown(y);
             cout<<sum[y]<<endl;
         }
     }
