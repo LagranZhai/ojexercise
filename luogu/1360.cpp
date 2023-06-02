@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 #define int long long
 using namespace std;
-const int maxm=30,maxn=1e5;
+const int maxm=60,maxn=1e5;
 vector<int > b;
 int a[maxm*2];
 map<vector<int >,int > mymap;
@@ -11,6 +11,13 @@ signed main(){
     cin>>n>>m;
     int ans=0;
     int t=0;
+<<<<<<< HEAD
+=======
+    for(int k=1;k<m;k++){
+        b.push_back(0);
+    }
+    mymap.insert(make_pair(b,0));
+>>>>>>> 874b0c09da29ee3ae9f5d522da99f33a30cd7e4f
     for(int i=1;i<=n;i++){
         cin>>t;
         int j=0;
@@ -20,7 +27,11 @@ signed main(){
             j++;
         }
         b.clear();
+<<<<<<< HEAD
         for(int k=1;k<=m;k++){
+=======
+        for(int k=1;k<m;k++){
+>>>>>>> 874b0c09da29ee3ae9f5d522da99f33a30cd7e4f
             b.push_back(a[k]-a[k-1]);
         }
         if(mymap.find(b)!=mymap.end()){
@@ -30,4 +41,8 @@ signed main(){
     }
     cout<<ans<<endl;
     return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 874b0c09da29ee3ae9f5d522da99f33a30cd7e4f
