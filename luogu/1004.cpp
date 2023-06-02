@@ -37,10 +37,10 @@ int main(){
             for(int k{1};k<=N;k++){
                 if(i+j-k>N||i+j-k<1)continue;
                 if(k!=i){
-                    dp[i][j][k]=max(dp[i][j][k],max(max(max(dp[i-1][j][k],dp[i-1][j][k-1]),dp[i][j-1][k]),dp[i][j-1][k-1])+a[i][j]+a[k][i+j-k]);
+                    dp[i][j][k]=max(dp[i][j][k],max({dp[i-1][j][k],dp[i-1][j][k-1],dp[i][j-1][k],dp[i][j-1][k-1]})+a[i][j]+a[k][i+j-k]);
                 }
-                else dp[i][j][k]=max(dp[i][j][k],max(max(max(dp[i-1][j][k],dp[i-1][j][k-1]),dp[i][j-1][k]),dp[i][j-1][k-1])+a[i][j]);
-            }
+                else dp[i][j][k]=max(dp[i][j][k],max({dp[i-1][j][k],dp[i-1][j][k-1],dp[i][j-1][k],dp[i][j-1][k-1]})+a[i][j]);
+                }
         }
     }
     cout<<dp[N][N][N]<<"\n";
