@@ -34,16 +34,16 @@ int main(){
     std::fill(std::begin(minoflen),std::end(minoflen),std::numeric_limits<int >::max());
     minoflen[0]=0;
     for(int i{1};i<=n;i++){
-        int *lower=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i]);
-        dp1[i]=lower-std::begin(minoflen)+((*lower==a[i])?0:1);
+        //int *lower=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i]);
+        dp1[i]=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i])-std::begin(minoflen);
         minoflen[dp1[i]]=min(minoflen[dp1[i]],a[i]);
     }
     std::fill(std::begin(minoflen),std::end(minoflen),std::numeric_limits<int >::lowest());
     minoflen[0]=std::numeric_limits<int >::max();
     for(int i{n};i>=1;i--){
-        int *lower=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i],[](int a,int b)->bool{return a>b;});
-        dp2[i]=lower-std::begin(minoflen)+((*lower==a[i])?0:1);
-        minoflen[dp2[i]]=min(minoflen[dp2[i]],a[i]);
+        //int *lower=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i]);
+        dp1[i]=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i],std::greater<int >())-std::begin(minoflen);
+        minoflen[dp1[i]]=min(minoflen[dp1[i]],a[i]);
     }
     cout<<
     return 0;
