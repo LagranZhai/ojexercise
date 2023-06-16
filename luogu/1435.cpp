@@ -17,13 +17,15 @@ template<>
 Myos<std::ostringstream>::~Myos()noexcept{
     std::cout<<mys.str()<<std::flush;
 }
-auto&& cout = Myos<std::ostringstream>(std::ostringstream()).mys;
-//auto&& cout = Myos<std::ostream&>(std::cout).mys;
-constexpr int maxn=12;
-
+//Myos<std::ostream&> t{std::cout};
+//Myos<std::ostringstream> t{std::ostringstream()};
+const auto& cout = Myos<std::ostringstream>(std::ostringstream()).mys;
+constexpr int maxn=1000;
+std::string t;
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    
+    cin>>t;
+
     return 0;
 }

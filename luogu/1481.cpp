@@ -3,7 +3,6 @@
 #include<sstream>
 #include<algorithm>
 using std::cin,std::ios,std::max,std::min;
-constexpr int maxn=2000,maxm=75;
 template<class T>
 struct Myos{
     T mys;
@@ -11,38 +10,41 @@ struct Myos{
             std::forward<T>(_s)
             ){}
     ~Myos()noexcept{
-        std::cout<<std::flush;
+        mys<<"t"<<std::flush;
     };
 };
 template<>
 Myos<std::ostringstream>::~Myos()noexcept{
-    std::cout<<mys.str()<<std::flush;
+    std::cout<<"a"<<mys.str()<<std::flush;
 }
-//Myos<std::ostream&> t{std::cout};
-Myos<std::ostringstream> t{std::ostringstream()};
-auto& cout = t.mys;
-int n,ch[maxn*maxm][maxm+10],tot=1;
-bool cnt[maxn*maxm];
-int insert(const std::string &s){
-    int p=1,cur=0;
-    for(int i{0};i<s.size();i++){
-        if(ch[p][s[i]-'a']==0)ch[p][s[i]-'a']=++tot;
-        p=ch[p][s[i]-'a'];
-        if(cnt[p])cur++;
+//auto&& cout = Myos<std::ostringstream>(std::ostringstream()).mys;
+auto&& cout = std::move(Myos<std::ostream&>(std::cout).mys);
+constexpr int maxn=2000,maxm=27;
+int n;
+int tot=1,ch[maxn*maxm][maxm];
+bool tag[maxn*maxm];
+int insert(std::string t){
+    int p=1,ans=0;
+    for(int i{0};i<t.size();i++){
+        if(ch[p][t[i]-'a']==0)ch[p][t[i]-'a']=++tot;
+        p=ch[p][t[i]-'a'];
+        if(tag[p])ans++;
     }
-    cnt[p]=1;
-    return cur;
+    tag[p]=1;
+    return ans+1;
 }
+// void init(){
+
+// }
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    cin>>n;
-    std::string t;
-    int ans=0;
+    cin>>n;std::string t;
+    int maxans=0;
     for(int i{1};i<=n;i++){
         cin>>t;
-        ans=max(ans,insert(t));
+        maxans=max(insert(t),maxans);
     }
-    cout<<ans<<"\n";
+    cout<<maxans<<"\n";
     return 0;
 }
