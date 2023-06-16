@@ -38,13 +38,18 @@ int main(){
         dp1[i]=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i])-std::begin(minoflen);
         minoflen[dp1[i]]=min(minoflen[dp1[i]],a[i]);
     }
-    std::fill(std::begin(minoflen),std::end(minoflen),std::numeric_limits<int >::lowest());
-    minoflen[0]=std::numeric_limits<int >::max();
+    std::fill(std::begin(minoflen),std::end(minoflen),std::numeric_limits<int >::max());
+    minoflen[0]=0;
+    //cout<<minoflen[1]<<std::endl;
     for(int i{n};i>=1;i--){
         //int *lower=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i]);
-        dp1[i]=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i],std::greater<int >())-std::begin(minoflen);
-        minoflen[dp1[i]]=min(minoflen[dp1[i]],a[i]);
+        dp2[i]=std::lower_bound(std::begin(minoflen),std::end(minoflen),a[i])-std::begin(minoflen);
+        minoflen[dp2[i]]=min(minoflen[dp2[i]],a[i]);
     }
-    cout<<
+    int mmax=0;
+    for(int i{1};i<=n;i++){
+        mmax=max(mmax,dp1[i]+dp2[i]-1);
+    }
+    cout<<n-mmax<<"\n";
     return 0;
 }
