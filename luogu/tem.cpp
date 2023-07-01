@@ -3,50 +3,41 @@
 #include<sstream>
 #include<algorithm>
 #include<type_traits>
+#include<functional>
 using std::cin,std::ios,std::max,std::min;
-int fpfp(int (*fp_)()){std::cout<<fp_();return fp_();}
 template<typename T>
 struct Myos{
     T mys;
     Myos(T&& _s)noexcept:mys(
-            std::forward<T>(_s)
-            ){}
-    template<typename Traits>
-    Myos<T>& operator<<(Traits&& value)noexcept {
-        //mys<<std::forward<Traits>(value);
-        value(mys);
+        std::forward<T>(_s)
+    ) {}
+    Myos<T>& flush() {
+        mys<<std::flush;
         return *this;
     }
-    //template<typename Traits,typename CharT>
-    //Myos<T>& operator<<(std::basic_ostream<CharT, Traits>& (*func)
-        //(std::basic_ostream<CharT, Traits>&) ){
-        //mys<<func;
-        //return *this;
-    //}
-    ~Myos()noexcept{
-        mys<<"a"<<std::flush;
-    };
+    template<typename Traits>
+    Myos<T>& operator<<(Traits&& value)noexcept {
+        mys<<std::forward<Traits>(value);
+        return *this;
+    }
+    ~Myos() {
+        flush();
+    }
 };
-//template<typename T,typename Traits> 
-//Myos<T,Traits>& Myos<T,Traits>::operator<<(Traits&& value)noexcept {
-        //mys<<std::forward<Traits>(value);
-        //this->mys<<value;
-        //return *this;
-//}
-template<> Myos<std::ostringstream>::~Myos()noexcept{
-    std::cout<<mys.str()<<std::flush;
+template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
+        std::cout<<mys.str()<<std::flush;
+        mys.str("");
+        return *this;
 }
-Myos<std::ostream&> cout{std::cout};
-//Myos<std::ostringstream> cout{std::ostringstream()};
-
+//Myos<std::ostream&> cout{std::cout};
+Myos<std::ostringstream> cout{std::ostringstream()};
 constexpr int maxn=12;
-int fp(){
-    return 1;
-}
+
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
 
-    cout<<std::flush;
+    cout<<1;
+    cout.flush();
     return 0;
 }

@@ -71,17 +71,17 @@ namespace tcd {
             if(siz[to]>siz[hson[x]])hson[x]=to;
         }
     }
-    void dfs2(int x,int f,int ctop) {
+    void dfs2(int x,int ctop) {
         dfn[x]=++cur;
         rnk[cur]=x;
         top[x]=ctop;
         if(hson[x]){
-            dfs2(hson[x],x,ctop);
+            dfs2(hson[x],ctop);
         }
         for(int e{head[x]};e;e=edg[e].nxt){
             int to=edg[e].v;
-            if(to!=hson[x]&&to!=f){
-                dfs2(to,x,to);
+            if(to!=hson[x]&&to!=fa[x]){
+                dfs2(to,to);
             }
         }
     }
@@ -100,7 +100,7 @@ namespace tcd {
         return ;
     }
 }
-namespace segtree{
+namespace segtree {
     modint tree[maxn*5],a[maxn*2],tag[maxn*5];
     void build(int cl,int cr,int p) {
         if(cl==cr){
@@ -184,7 +184,7 @@ int main(){
     }
 }
     tcd::dfs1(r,0);
-    tcd::dfs2(r,0,r);
+    tcd::dfs2(r,r);
     for(int i{1};i<=n;i++){
         segtree::a[i]=a[tcd::rnk[i]];
     }
