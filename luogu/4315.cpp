@@ -23,17 +23,25 @@ auto& cout=t.mys;
 
 constexpr int maxn=1e5;
 
-int head[maxn*3],cnt=0;
-
+int head[maxn*3],cnt=0,cnt1=0;
+using modint=int;
 struct Edge{
     int u=0,v=0,nxt=0,w=0;
-}edg[maxn*3],treeedg[maxn*2];
-void addedge(int u_,int v_,int w_,Edge* edg) {
+}edg[maxn*3];
+struct Edge1{
+    int u=0,v=0,w=0;
+}edg1[maxn*2];
+void addedge(int u_,int v_,int w_) {
     edg[++cnt].v=v_;
     edg[cnt].u=u_;
     edg[cnt].w=w_;
     edg[cnt].nxt=head[u_];
     head[u_]=cnt;
+}
+void addedge1(int u_,int v_,int w_) {
+    edg1[++cnt1].u=u_;
+    edg1[cnt1].v=v_;
+    edg1[cnt1].w=w_;
 }
 namespace tcd {
     int siz[maxn*2],depth[maxn*2],hson[maxn*2],fa[maxn*2]
@@ -46,7 +54,7 @@ namespace tcd {
         for(int e{head[x]};e;e=edg[e].nxt) {
             int to=edg[e].v;
             if(to==f)continue;
-            dfs1(e,x);
+            dfs1(e,to);
             siz[x]+=siz[to];
             if(siz[to]>siz[hson[x]])hson[x]=to;
         }
@@ -76,11 +84,11 @@ namespace tcd {
         if(depth[x]<depth[y]){
             std::swap(x,y);
         }
-        func(dfn[y],dfn[x],v);
+        if(depth[x]!=depth[y])func(dfn[y],dfn[x]-1,v);
         return ;
     }
 }
-using modint=int;
+
 namespace segtree {
     modint tree[maxn*5],a[maxn*2],tag[maxn*5],tag1[maxn*5];
     void build(int cl,int cr,int p) {
@@ -183,9 +191,14 @@ namespace segtree {
 }
 int n;
 void cup(int x,int y,modint& z) {
-    tcd::lca(x,y,z,[&](int a,int b,modint& c) {
-            segtree::update(1,n,1,a,b,c);
-            });
+    auto l=[&](int a,int b,modint& c) {segtree::update(1,n,1,a,b,c);};
+    tcd::lca(x,y,z,l);
+    return ;
+}
+void cup1(int x,int y,modint& z) {
+    auto l=[&](int a,int b,modint& c) {segtree::update1(1,n,1,a,b,c);};
+    //auto l1=[&](int a,int b,modint& c) {segtree::update(1,n,1,a,b-1,c);}
+    tcd::lca(x,y,z,l);
     return ;
 }
 void cqu(int x,int y,modint& z) {
@@ -202,9 +215,9 @@ int main(){
     int u,v,w;
     for(int i{1};i<n;i++){
         cin>>u>>v>>w;
-        addedge(u,v,w,edg);
-        addedge(v,u,w,edg);
-        addedge(u,v,w,treeedg);
+        addedge(u,v,w);
+        addedge(v,u,w);
+        addedge1(u,v,w);
     }
 }
     addedge(0,1,0);
@@ -221,7 +234,7 @@ int main(){
         if(s=="Stop")break;
         else if(s=="Change"){
             cin>>u>>w;
-            int u_=treeedg[u].u,v_=treeedg[u].v;
+            int u_=edg1[u].u,v_=edg1[u].v;
             if(tcd::depth[v_]<tcd::depth[u_])std::swap(u_,v_);
             cup(v_,v_,w);
         }
@@ -230,10 +243,13 @@ int main(){
             cup(u,v,w);
         }
         else if(s=="Add"){
-
+            cin>>u>>v;
+            int ans{0};
+            cqu(u,v,ans);
+            cout<<ans<<"\n";
         }
     }
-    for(int i{1};i<=m;i++){
+    /*for(int i{1};i<=m;i++){
         cin>>opt;
         if(opt==1){
             cin>>x>>y>>z;
@@ -257,7 +273,8 @@ int main(){
             segtree::query(1,n,1,dfn[x],dfn[x]+siz[x]-1,ans);
             cout<<(int)ans<<"\n";
         }
-    }
+    }*/
 }
+    cout.flush();
     return 0;
 }
