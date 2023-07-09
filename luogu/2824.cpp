@@ -32,12 +32,12 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
 constexpr int maxn=1e5;
-int n,m;
-class Segtree {
+int n,m,q;
+struct Segtree {
     int tree[maxn*5],a[maxn*2],tag[maxn*5];
     void build(int cl,int cr,int p) {
         if(cl==cr){
-            tree[p]=0;
+            tree[p]=a[cl];
             tag[p]=0;
             return ;
         }
@@ -111,11 +111,20 @@ bool check(int v){
     }
     tree->build(1,n,1);
     for(int i{1};i<=m;i++){
-        auto &[op,l,r]=que[m];
+        auto &[op,l,r]=que[i];
+        int sum=0;
+        tree->query(1,n,1,l,r,sum);
         if(op==1){
-            
+            tree->update(1,n,1,l,l+sum-1,1);
+            if(l+sum<=r)tree->update(1,n,1,l+sum,r,0);
+        }
+        else{
+            tree->update(1,n,1,r-sum+1,r,1);
+            if(r-sum>=l)tree->update(1,n,1,l,r-sum,0);
         }
     }
+    int ans=0;tree->query(1,n,1,q,q,ans);
+    return ans;
 }
 int main(){
     ios::sync_with_stdio(false);
@@ -127,14 +136,17 @@ int main(){
     }
     std::copy(std::begin(a),std::end(a),std::begin(b));
     std::sort(b+1,b+n+1);
-    int l=1,r=n,mid=(l+r)/2;
-    while(l!=r){
+    cin>>q;
+    int l=1,r=n,mid=(l+r)/2,ans=0;
+    while(l<=r){
         mid=(l+r)/2;
-        if(check(b[mid])){
-            r=mid;
+        if(check(mid)){
+            ans=mid;
+            l=mid+1;
         }
-        else l=mid+1;
+        else r=mid-1;
     }
+    cout<<ans<<"\n";
     cout.flush();
     return 0;
 }
