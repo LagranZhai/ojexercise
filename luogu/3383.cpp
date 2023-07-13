@@ -1,29 +1,33 @@
-#include<bits/stdc++.h>
+#include<algorithm>
+#include<iostream>
 using namespace std;
 using ll=long long;
-const int maxn=1e8;
-int vis[maxn+100],pri[maxn],cnt=0;
-void init(int n){
+constexpr int maxn=1e3;
+consteval std::vector<int > init(){
+  int vis[maxn+100]={},n=maxn;
+  vector<int > pri;
   for(int i=2;i<=n;i++){
     if(!vis[i]){
-      pri[++cnt]=i;
+      pri.push_back(i);
     }
-    for(int j=1;j<=cnt;j++) {
+    for(int j=0;j<pri.size();j++) {
       if(1ll*i*pri[j]>n)break;
       vis[i*pri[j]]=1;
       if(i%pri[j]==0)break;
     }
   }
+  return pri;
 }
 int main(){
+    constexpr auto pri=init();
     ios::sync_with_stdio(false);
     int n,q;
     cin>>n>>q;
-    init(n);
     int x;
     for(int i=1;i<=q;i++){
         cin>>x;
-        cout<<pri[x]<<'\n';
+        int v=pri[x-1];
+        cout<<v<<'\n';
     }
     return 0;
 }
