@@ -5,6 +5,7 @@
 #include<type_traits>
 #include<functional>
 #include<deque>
+#include<limits>
 using std::cin,std::ios,std::max,std::min;
 template<typename T>
 struct Myos{
@@ -33,7 +34,7 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
 constexpr int maxn=2000;
-int T,maxP,W,ap[maxn*2],as[maxn*2],bp[maxn*2],bs[maxn*2],dp[maxn+100][maxn+100];
+int T,maxP,W,ap[maxn*2],as[maxn*2],bp[maxn*2],bs[maxn*2],dp[maxn+10][maxn+10];
 std::deque<int > q;
 int main() {
     ios::sync_with_stdio(false);
@@ -42,14 +43,15 @@ int main() {
     for(int i{1};i<=T;i++){
         cin>>ap[i]>>bp[i]>>as[i]>>bs[i];
     }
+    std::fill(dp[0],dp[0]+(maxn+10)*(maxn+10),std::numeric_limits<int >::min());
     for(int i{1};i<=T;i++){
         for(int j{0};j<=as[i];j++){
-            dp[i][j]=-ap[i]*j;
+            dp[i][j]=-1*ap[i]*j;
         }
-        for(int j{0};i<=maxP;j++){
+        for(int j{0};j<=maxP;j++){
             dp[i][j]=max(dp[i][j],dp[i-1][j]);
         }
-        if(i-W<1)continue;
+        if(i-W-1<0)continue;
         q.clear();
         for(int j{0};j<=maxP;j++){
             while(!q.empty()&&j-q.front()>as[i])q.pop_front();
