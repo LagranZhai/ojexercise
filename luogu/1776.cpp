@@ -4,6 +4,7 @@
 #include<algorithm>
 #include<type_traits>
 #include<functional>
+#include<queue>
 using std::cin,std::ios,std::max,std::min;
 template<typename T>
 struct Myos{
@@ -31,34 +32,24 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=2e5,maxk=50;
-int a[maxn*2],b[maxn*2],n,k,p;
-int cnt[maxk*2],sum[maxk*2][maxn*2];
+constexpr int maxn=100;
+std::deque<int > q;
+int v[maxn*2],w[maxn*2],m[maxn*2];
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    cin>>n>>k>>p;
+    int n,W;
+    cin>>n>>W;
     for(int i{1};i<=n;i++){
-        cin>>a[i]>>b[i];
+        cin>>v[i]>>w[i]>>m[i];
     }
     for(int i{1};i<=n;i++){
-        for(int j{0};j<k;j++){
-            sum[j][i]=sum[j][i-1];
-        }
-        sum[a[i]][i]+=1;
-    }
-    long long ans=0;
-    for(int i{n};i>=1;i--){
-        cnt[a[i]]++;
-        if(b[i]<=p){
-            ans+=cnt[a[i]]-1;
-            for(int j{0};j<k;j++){
-                ans+=1ll*cnt[j]*sum[j][i-1];
-                cnt[j]=0;
-            }
+        q.clear();
+        q.push()
+        for(int j{W};j>=0;j--){
+            while(q.front())
         }
     }
-    cout<<ans<<"\n";
     cout.flush();
     return 0;
 }
