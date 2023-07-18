@@ -4,7 +4,7 @@
 #include<algorithm>
 #include<type_traits>
 #include<functional>
-#include<queue>
+#include<vector>
 using std::cin,std::ios,std::max,std::min;
 template<typename T>
 struct Myos{
@@ -32,34 +32,45 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=100,maxW=4e4;
-std::deque<int > q;
-int v[maxn*2],w[maxn*2],m[maxn*2];
-int dp[maxn*2][maxW+100];
+constexpr int maxn=100,maxm=25000;
+int n;
+int dp[maxm+100];
+std::vector<int > a;
+void solve(){
+    int amax=*std::max_element(std::begin(a),std::end(a));
+    int amin=*std::max_element(std::begin(a),std::end(a));
+    std::fill(dp,dp+maxm+100,0);
+    dp[0]=1;
+    for(int i{0};i<a.size();i++){
+        for(int j{0};j+a[i]<=amax;j++){
+            if(dp[j])dp[j+a[i]]+=1;
+        }
+    }
+    int ans=a.size();
+    for(int i{0};i<a.size();i++){
+        if(dp[a[i]]>1)ans--;
+    }
+    cout<<ans<<"\n";
+    return;
+}
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    int n,W;
-    cin>>n>>W;
-    for(int i{1};i<=n;i++){
-        cin>>v[i]>>w[i]>>m[i];
-    }
-    for(int i{1};i<=n;i++){
-        for(int j{0};j<w[i];j++){
-            q.clear();
-            for(int k{0};k*w[i]+j<=W;k++){
-                while(!q.empty()&&k-q.front()>m[i])q.pop_front();
-                while(!q.empty()&&dp[i-1][q.back()*w[i]+j]-q.back()*v[i]<dp[i-1][k*w[i]+j]-k*v[i])q.pop_back();
-                q.push_back(k);
-                dp[i][k*w[i]+j]=max(dp[i][k*w[i]+j],dp[i-1][q.front()*w[i]+j]-q.front()*v[i]+k*v[i]);
+    int T;
+    cin>>T;
+    while(T--){
+        a.clear();
+        cin>>n;
+        {
+            int t;
+            for(int i{1};i<=n;i++){
+                cin>>t;
+                a.push_back(t);
             }
         }
+
+        solve();
     }
-    int ans=0;
-    for(int i{0};i<=W;i++){
-        ans=max(ans,dp[n][i]);
-    }
-    cout<<ans<<"\n";
     cout.flush();
     return 0;
 }
