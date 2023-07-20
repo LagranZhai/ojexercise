@@ -4,7 +4,11 @@
 #include<algorithm>
 #include<type_traits>
 #include<functional>
-using std::cin,std::ios,std::max,std::min,std::swap;
+using std::cin;
+using std::ios;
+using std::max;
+using std::min;
+using std::swap;
 template<typename T>
 struct Myos{
     T mys;
@@ -36,13 +40,14 @@ int n,m;
 int a[maxn+10];
 int ch[maxn+10][3],fa[maxn+10],sum[maxn+10][2],tot=0;
 bool tag[maxn+10];
-inline int chk(int x){
-    if(ch[fa[x]][1]==x)return 1;
-    if(ch[fa[x]][0]==x)return 0;
-    return -1;
+inline bool isroot(int x){
+    return (x!=ch[fa[x]][0])&&(x!=ch[fa[x]][1]);
+}
+inline bool chk(int x){
+    return (x==ch[fa[x]][1]);
 }
 inline void clear(int x){
-    ch[x][0]=ch[x][1]=ch[x][2]=fa[x]=sum[x][0]=sum[x][1]=a[x]=tag[x]=0;
+    ch[x][0]=ch[x][1]=ch[x][2]=sum[x][0]=sum[x][1]=a[x]=tag[x]=0;
 }
 inline void setfa(int x,int f,bool type){
     if(x)fa[x]=f;
@@ -62,7 +67,6 @@ inline void fn(int x){
     if(x){
         tag[x]^=1;
         swap(ch[x][0],ch[x][1]);
-        return ;
     }
     return ;
 }
@@ -76,31 +80,36 @@ inline void pushdown(int x,bool type){
     return ;
 }
 void reverse_pushdown(int x,bool type){
-    if(chk(x)!=-1)reverse_pushdown(fa[x],type);
+    if(!isroot(x))reverse_pushdown(fa[x],type);
     pushdown(x,type);
 }
 void spin(int x,bool type){
-    int f=fa[x],dir=chk(x),ff=fa[f];
-    if(chk(ff)!=-1)ch[ff][ch[ff][2]==f?2:chk(f)]=x;
-    if(ch[x][dir^1])fa[ch[x][dir^1]]=f;
-    ch[f][dir]=ch[x][dir^1];ch[x][dir^1]=f;
+    int f=fa[x],dir=chk(x),ff=fa[f],w=ch[x][dir^1];
+    if(ff)ch[ff][ch[ff][2]==f?2:chk(f)]=x;//?
+    ch[x][dir^1]=f;ch[f][dir]=w;
+    if(w)fa[w]=f;
     fa[f]=x;fa[x]=ff;
     upsum(f,type);upsum(x,type);
 }
 void splay(int x,bool type,int goal=0){
     reverse_pushdown(x,type);
-    int f=fa[x];
-    while(chk(x)!=-1&&f!=goal){
-        if(chk(f)!=-1&&fa[f]!=goal)spin(chk(f)==chk(x)?f:x,type);
-        spin(x,type);
-        f=fa[x];
+    //int f=fa[x];
+    // while(!isroot(x)&&f!=goal){     
+    //     spin(x,type);
+    //     if(!isroot(f)&&fa[f]!=goal)spin(chk(f)==chk(x)?f:x,type);
+    //     f=fa[x];
+    // }
+    for(int y;y=fa[x],(!isroot(x))&&y!=goal;spin(x,type)){
+        if(fa[y]!=goal&&(!isroot(y)))spin(chk(x)^chk(y)?x:y,type);
     }
     return ;
 }
 void del(int x){
     setfa(ch[x][2],fa[x],1);
     if(ch[x][0]){
-        int cur=x,rt=x;
+        int rt=x;
+        x=ch[x][0];
+        int cur=x;
         while(x){
             pushdown(x,1);
             cur=x;
@@ -145,18 +154,17 @@ void access(int x){
         splice(fa[x]);
         x=fa[x];
     }
-    //splay(cur,0);
+    splay(cur,0);
     return ;
 }
 void makeroot(int x){
     access(x);
-    splay(x,0);
-    tag[x]^=1;
-    swap(ch[x][0],ch[x][1]);
+    //splay(x,0);
+    fn(x);
 }
 int findroot(int x){
     access(x);
-    splay(x,0);
+    //splay(x,0);
     int cur=x;
     while(x){
         pushdown(x,0);
@@ -169,11 +177,11 @@ int findroot(int x){
 void split(int x,int y){
     makeroot(x);
     access(y);
-    splay(y,0);
+    //splay(y,0);
 }
 void cut(int x,int y){
     split(x,y);
-    if(ch[y][0]==x&&fa[x]==y&&ch[x][1]==0){
+    if(ch[y][0]==x&&ch[x][1]==0){
         fa[x]=0;
         ch[y][0]=0;
         upsum(y,0);
@@ -197,16 +205,19 @@ int main(){
         cin>>a[i];
         upsum(i,0);
     }
+    std::cerr<<"A";
     int opt,x,y;
     for(int i=1;i<=m;i++){
         cin>>opt>>x>>y;
         //cout<<"b"<<endl;
         if(opt==0){
+            std::cerr<<"b";
             split(x,y);
-            cout<<sum[y][0]<<"\n";
+            std::cout<<sum[y][0]<<std::endl;
             //cout<<"a"<<endl;
         }
         else if(opt==1){
+            std::cerr<<"c";
             link(x,y);
         }
         else if(opt==2){
@@ -214,7 +225,7 @@ int main(){
         }
         else if(opt==3){
             access(x);
-            splay(x,0);
+            //splay(x,0);
             a[x]=y;
             upsum(x,0);
         }
