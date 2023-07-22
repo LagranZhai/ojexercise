@@ -40,8 +40,9 @@ constexpr int maxn=2e5;
 int n,m;
 namespace satt{
     int a[maxn+10];
-    int ch[maxn+10][3],fa[maxn+10],sum[maxn+10][2],tot=0;
-    bool tag[maxn+10];
+    int ch[maxn+10][3],fa[maxn+10],sum[maxn+10][2],tmin[maxn+10][2],tmax[maxn+10][2],tot=0;
+    int add_tag[maxn+10][2],cov_tag[maxn+10][2];
+    bool rtag[maxn+10];
     std::stack<int > st;
     inline int newnode(){
         if(!st.empty()){
@@ -58,7 +59,7 @@ namespace satt{
         return (x==ch[fa[x]][1]);
     }
     inline void clear(int x){
-        ch[x][0]=ch[x][1]=ch[x][2]=sum[x][0]=sum[x][1]=a[x]=tag[x]=fa[x]=0;
+        ch[x][0]=ch[x][1]=ch[x][2]=sum[x][0]=sum[x][1]=a[x]=rtag[x]=fa[x]=0;
         st.push(x);
     }
     inline void setfa(int x,int f,int ch_type){
@@ -78,7 +79,7 @@ namespace satt{
     }
     inline void fn(int x){
         if(x){
-            tag[x]^=1;
+            rtag[x]^=1;
             swap(ch[x][0],ch[x][1]);
         }
         return ;
@@ -88,10 +89,10 @@ namespace satt{
         return;
     }
     template<> inline void pushdown<0>(int x){
-        if(tag[x]){
+        if(rtag[x]){
             fn(ch[x][0]);
             fn(ch[x][1]);
-            tag[x]=0;
+            rtag[x]=0;
         }
         return ;
     }
