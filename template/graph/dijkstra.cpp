@@ -2,7 +2,7 @@
 #include <cstring>
 #include <queue>
 #include <algorithm>
-#include<set>
+#include <set>
 
 //https://www.luogu.com.cn/problem/P3371
 //https://www.luogu.com.cn/problem/P4779
