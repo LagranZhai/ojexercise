@@ -25,7 +25,7 @@ void tarjan(int x,int fa){
             child++;
             tarjan(to,x);
             low[x]=min(low[x],low[to]);
-            if(low[to]>=dfn[x]){
+            if(low[to]>=dfn[x]){    
                 ++vdcccnt;
                 while(1){
                     vdcc[vdcccnt].push_back(s.top());
