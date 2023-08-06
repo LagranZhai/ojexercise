@@ -36,8 +36,10 @@ constexpr int maxn=12;
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-
-    cout<<1;
+    long long a,b,c;
+    cin>>a>>b>>c;
+    if(a+b+c<=100&&b%5ll==0&&c%7ll==0&&a-b>b-c)cout<<"Yes"<<"\n";
+    else cout<<"No\n";
     cout.flush();
     return 0;
 }

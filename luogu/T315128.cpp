@@ -32,12 +32,25 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
 constexpr int maxn=12;
-
+int T;
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-
-    cout<<1;
+    cin>>T;
+    long long a;
+    while(T--){
+        cin>>a;
+        int n=__builtin_popcountll(a);
+        if(n>=3){
+            cout<<"No,Commander\n";
+        }
+        else{
+            if(n==2&&a%2==0){
+                cout<<a+(a&(-a))<<"\n";
+            }
+            else cout<<a+1<<"\n";
+        }
+    }
     cout.flush();
     return 0;
 }

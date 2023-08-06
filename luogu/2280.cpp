@@ -31,13 +31,43 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=12;
-
-int main(){
+constexpr int maxn=5e3;
+int n,m;
+int a[maxn+10][maxn+10];
+int solve(int x,int y,int (*sum)[maxn+10]) {
+    for(int i{1};i<=x;i++){
+        for(int j{1};j<=y;j++){
+            sum[i][j]+=sum[i][j-1];
+        }
+    }
+    for(int i{1};i<=x;i++){
+        for(int j{1};j<=y;j++){
+            sum[i][j]+=sum[i-1][j];
+        }
+    }
+    int ans=0;
+    for(int i{min(m,x)};i<=x;i++){
+        for(int j{min(m,y)};j<=y;j++){
+            ans=max(ans,sum[i][j]-sum[max(0,i-m)][j]-sum[i][max(0,j-m)]+sum[max(0,i-m)][max(0,j-m)]);
+        }
+    }
+    return ans;
+}
+int main() {
     ios::sync_with_stdio(false);
     cin.tie();
-
-    cout<<1;
+    cin>>n>>m;
+    int maxx=0,maxy=0;
+{
+    int x,y,z;
+    for(int i{1};i<=n;i++){
+        cin>>x>>y>>z;
+        maxx=max(maxx,x+1);
+        maxy=max(maxy,y+1);
+        a[x+1][y+1]=z;
+    }
+}
+    cout<<solve(maxx,maxy,a)<<"\n";
     cout.flush();
     return 0;
 }

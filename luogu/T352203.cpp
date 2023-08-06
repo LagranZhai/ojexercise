@@ -31,13 +31,21 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=12;
-
+constexpr int maxn=5e5;
+long long a[maxn*2],b[maxn*2],n;
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-
-    cout<<1;
+    cin>>n;
+    for(int i{1};i<=n;i++){
+        cin>>a[i]>>b[i];
+    }
+    long long e=0,maxr=0;
+    for(int i{1};i<=n-1;i++){
+        maxr=max(maxr,a[i]+b[i]);
+        e=max(e,a[i+1]-maxr);
+    }
+    cout<<e<<"\n";
     cout.flush();
     return 0;
 }

@@ -7,6 +7,7 @@
    long long c=1ll*a*b;
    long long c=0ll+a+b;
 ```
+   模意义下的减法请先加模数再取模。
 
 4. 取 `min` 时，要把变量初始化为 `0x3f3f3f3f` 或者其他很大的数值，还要考虑加法或者乘法会不会爆 `long long`。刘汝佳的紫书上提供了另一种方法：每次取 `min` 时，判断一下变量有没有初始化（也就是是不是 `0x3f3f3f3f`），这样可以比较好地应对溢出问题。
 
@@ -44,3 +45,5 @@ g++ name.cpp -Wall -Wextra -std=c++14 -O2 -Wl,--stack=536870912 -g -o name
 ```
 
 16. 一定要在最后调用 `cout.flush()`。
+
+17. multiset.count的复杂度是Logarithmic in the size of the container plus linear in the number of elements found.

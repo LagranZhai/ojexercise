@@ -4,6 +4,7 @@
 #include<algorithm>
 #include<type_traits>
 #include<functional>
+#include<stack>
 using std::cin,std::ios,std::max,std::min;
 template<typename T>
 struct Myos{
@@ -32,12 +33,41 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
 constexpr int maxn=12;
-
+std::stack<int > s;
 int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-
-    cout<<1;
+    int n;
+    cin>>n;
+    int ans=0;
+{
+    int w,h;
+    for(int i{1};i<=n;i++){
+        cin>>w>>h;
+        if(s.empty()){
+            s.push(h);
+            continue;
+        }
+        while(!s.empty()){
+            if(s.top()<h){
+                s.push(h);
+                break;
+            }
+            else if(s.top()==h){
+                break;
+            }
+            else if(s.top()>h){
+                s.pop();
+                ans++;
+                if(s.empty()){
+                    s.push(h);
+                    break;
+                }
+            }
+        }
+    }
+}
+    cout<<ans+s.size()<<"\n";
     cout.flush();
     return 0;
 }
