@@ -5,6 +5,8 @@
 #include<type_traits>
 #include<functional>
 #include<stack>
+#include<vector>
+#include<limits>
 using std::cin;
 using std::ios;
 using std::max;
@@ -39,11 +41,19 @@ Myos<std::ostringstream> cout{std::ostringstream()};
 constexpr int maxn=2e5;
 int n,m;
 namespace satt{
+    //0 compress,1 rake
+    constexpr int inf=std::numeric_limits<int >::min();
+    constexpr int sup=std::numeric_limits<int >::max();
     int a[maxn+10];
     int ch[maxn+10][3],fa[maxn+10],sum[maxn+10][2],tmin[maxn+10][2],tmax[maxn+10][2],tot=0;
     int add_tag[maxn+10][2],cov_tag[maxn+10][2];
     bool rtag[maxn+10];
     std::stack<int > st;
+    void init(){
+        std::fill(cov_tag[0],cov_tag[0]+2*(maxn+10),inf);
+        std::fill(tmin[0],tmin[0]+(maxn+10)*2,sup);
+        std::fill(tmax[0],tmax[0]+(maxn+10)*2,inf);
+    }
     inline int newnode(){
         if(!st.empty()){
             int t=st.top();
@@ -58,6 +68,7 @@ namespace satt{
     inline bool chk(int x){
         return (x==ch[fa[x]][1]);
     }
+    //wrong
     inline void clear(int x){
         ch[x][0]=ch[x][1]=ch[x][2]=sum[x][0]=sum[x][1]=a[x]=rtag[x]=fa[x]=0;
         st.push(x);
@@ -69,15 +80,21 @@ namespace satt{
     }
     template<const bool type > inline void upsum(int x){}
     template<> inline void upsum<1>(int x){
-        sum[x][1]=sum[ch[x][0]][1]^sum[ch[x][1]][1]^sum[ch[x][2]][1];
+        sum[x][1]=sum[ch[x][0]][1]+sum[ch[x][1]][1]+sum[ch[x][2]][1];
+        tmin[x][1]=min(min(tmin[ch[x][0]][1],tmin[ch[x][1]][1]),tmin[ch[x][2]][1]);
+        tmax[x][1]=max(max(tmax[ch[x][0]][1],tmax[ch[x][1]][1]),tmax[ch[x][2]][1]);
         return ;
     }
     template<> inline void upsum<0>(int x){
-        sum[x][0]=sum[ch[x][0]][0]^sum[ch[x][1]][0]^a[x];
-        sum[x][1]=sum[ch[x][0]][1]^sum[ch[x][1]][1]^sum[ch[x][2]][1]^a[x];
+        sum[x][0]=sum[ch[x][0]][0]+sum[ch[x][1]][0]+a[x];
+        tmin[x][0]=min(min(tmin[ch[x][0]][0],tmin[ch[x][1]][0]),a[x]);
+        tmax[x][0]=max(max(tmax[ch[x][0]][0],tmax[ch[x][1]][0]),a[x]);
+        sum[x][1]=sum[ch[x][0]][1]+sum[ch[x][1]][1]+sum[ch[x][2]][1]+a[x];
+        tmin[x][1]=min(min(tmin[ch[x][0]][1],tmin[ch[x][1]][1]),min(a[x],tmin[ch[x][2]][1]));
+        tmax[x][0]=max(max(tmax[ch[x][0]][1],tmax[ch[x][1]][1]),max(a[x],tmax[ch[x][2]][1]));
         return ;
     }
-    inline void fn(int x){
+    inline void rv(int x){
         if(x){
             rtag[x]^=1;
             swap(ch[x][0],ch[x][1]);
@@ -90,9 +107,13 @@ namespace satt{
     }
     template<> inline void pushdown<0>(int x){
         if(rtag[x]){
-            fn(ch[x][0]);
-            fn(ch[x][1]);
+            rv(ch[x][0]);
+            rv(ch[x][1]);
             rtag[x]=0;
+        }
+        if(add_tag[x][0]){
+            add(ch[x][0],x);
+            add()
         }
         return ;
     }
