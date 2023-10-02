@@ -44,6 +44,10 @@ void splay(int x){
 }
 void access(int x){
     int son=0;
+    splay(x);
+    if(fa[x]==0){
+        return ;
+    }
     while(x){
         splay(x);
         ch[x][1]=son;
