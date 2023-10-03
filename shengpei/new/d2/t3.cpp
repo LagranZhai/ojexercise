@@ -173,7 +173,6 @@ signed main(){
             if(des[x]){
                 // access(2);splay(2);
                 // splay(1);
-                // cout<<sum[1]<<" "<<sum[2]<<"\n";
                 link(x,oldfa[x]);
                 des[x]^=1;
             }

@@ -25,6 +25,7 @@ void dfs(int x,int f){
         }
     }
 }
+
 void build(int p,int cl,int cr){
     if(cl==cr){
         tcnt[p]=0;
@@ -44,7 +45,7 @@ void update(int p,int cl,int cr,int l,int r,int d){
     }
     if(cl!=cr){
         int mid=(cl+cr)/2;
-        pushdown
+        pushdown()
     }
 }
 int main(){
