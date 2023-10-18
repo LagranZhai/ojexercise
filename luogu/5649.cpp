@@ -5,6 +5,8 @@
 #include<type_traits>
 #include<functional>
 #include<stack>
+#include<vector>
+#include<limits>
 using std::cin;
 using std::ios;
 using std::max;
@@ -37,13 +39,22 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush(){
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
 constexpr int maxn=2e5;
-int n,m;
+int n,q;
 namespace satt{
+    //0 compress,1 rake
+    constexpr int inf=std::numeric_limits<int >::min();
+    constexpr int sup=std::numeric_limits<int >::max();
     int a[maxn+10];
     int ch[maxn+10][3],fa[maxn+10],sum[maxn+10][2],tmin[maxn+10][2],tmax[maxn+10][2],tot=0;
     int add_tag[maxn+10][2],cov_tag[maxn+10][2];
+    int siz[maxn+10][2];
     bool rtag[maxn+10];
     std::stack<int > st;
+    void init(){
+        std::fill(cov_tag[0],cov_tag[0]+2*(maxn+10),inf);
+        std::fill(tmin[0],tmin[0]+(maxn+10)*2,sup);
+        std::fill(tmax[0],tmax[0]+(maxn+10)*2,inf);
+    }
     inline int newnode(){
         if(!st.empty()){
             int t=st.top();
@@ -58,6 +69,7 @@ namespace satt{
     inline bool chk(int x){
         return (x==ch[fa[x]][1]);
     }
+    //wrong
     inline void clear(int x){
         ch[x][0]=ch[x][1]=ch[x][2]=sum[x][0]=sum[x][1]=a[x]=rtag[x]=fa[x]=0;
         st.push(x);
@@ -67,40 +79,144 @@ namespace satt{
         ch[f][ch_type]=x;
         return ;
     }
-    template<const bool type > inline void upsum(int x){}
+    template<const bool ndoe_type> inline void upsum(int x){}
     template<> inline void upsum<1>(int x){
-        sum[x][1]=sum[ch[x][0]][1]^sum[ch[x][1]][1]^sum[ch[x][2]][1];
+        siz[x][1]=siz[ch[x][0]][1]+siz[ch[x][1]][1]+siz[ch[x][2]][1];
+        sum[x][1]=sum[ch[x][0]][1]+sum[ch[x][1]][1]+sum[ch[x][2]][1];
+        tmin[x][1]=min(min(tmin[ch[x][0]][1],tmin[ch[x][1]][1]),tmin[ch[x][2]][1]);
+        tmax[x][1]=max(max(tmax[ch[x][0]][1],tmax[ch[x][1]][1]),tmax[ch[x][2]][1]);
         return ;
     }
     template<> inline void upsum<0>(int x){
-        sum[x][0]=sum[ch[x][0]][0]^sum[ch[x][1]][0]^a[x];
-        sum[x][1]=sum[ch[x][0]][1]^sum[ch[x][1]][1]^sum[ch[x][2]][1]^a[x];
+        siz[x][0]=siz[ch[x][0]][0]+siz[ch[x][1]][0]+1;
+        sum[x][0]=sum[ch[x][0]][0]+sum[ch[x][1]][0]+a[x];
+        tmin[x][0]=min(min(tmin[ch[x][0]][0],tmin[ch[x][1]][0]),a[x]);
+        tmax[x][0]=max(max(tmax[ch[x][0]][0],tmax[ch[x][1]][0]),a[x]);
+        siz[x][1]=siz[ch[x][0]][1]+siz[ch[x][1]][1]+siz[ch[x][2]][1]+1;
+        sum[x][1]=sum[ch[x][0]][1]+sum[ch[x][1]][1]+sum[ch[x][2]][1]+a[x];
+        tmin[x][1]=min(min(tmin[ch[x][0]][1],tmin[ch[x][1]][1]),min(a[x],tmin[ch[x][2]][1]));
+        tmax[x][1]=max(max(tmax[ch[x][0]][1],tmax[ch[x][1]][1]),max(a[x],tmax[ch[x][2]][1]));
         return ;
     }
-    inline void fn(int x){
+    inline void rv(int x){
         if(x){
             rtag[x]^=1;
             swap(ch[x][0],ch[x][1]);
         }
         return ;
     }
-    template<const bool type > inline void pushdown(int x){}
-    template<> inline void pushdown<1>(int x){
-        return;
+    template<const bool node_type,const bool tag_type> inline void modifycovtag(int x,int fa){}
+    template<> inline void modifycovtag<0,1>(int x,int tag){
+        a[x]=tag;
+        sum[x][0]=a[x]*siz[x][0];
+        sum[x][1]=a[x]*siz[x][1];
+        tmax[x][0]=tmin[x][0]=tmax[x][1]=tmin[x][0]=a[x];
+        cov_tag[x][1]=cov_tag[fa][1];
+        cov_tag[x][0]=cov_tag[fa][1];
+        add_tag[x][0]=0;
+        add_tag[x][1]=0;
+        return ;
     }
-    template<> inline void pushdown<0>(int x){
+    template<> inline void modifycovtag<1,1>(int x,int fa){
+        sum[x][1]=cov_tag[fa][1]*siz[x][1];
+        tmin[x][1]=tmax[x][1]=cov_tag[fa][1];
+        cov_tag[x][1]=cov_tag[fa][1];
+        add_tag[x][1]=0;
+        return ;
+    }
+    template<> inline void modifycovtag<0,0>(int x,int fa){
+        a[x]=cov_tag[fa][0];
+        sum[x][0]=a[x]*siz[x][0];
+        tmax[x][0]=tmin[x][0]=a[x];
+        cov_tag[x][0]=cov_tag[fa][1];
+        add_tag[x][0]=0;
+        return ;
+    }
+    template<> inline void modifycovtag<1,0>(int x,int fa){
+        std::cerr<<"WTF";
+        return ;
+    }
+    template<const bool node_type,const bool tag_type> inline void modifyaddtag(int x,int fa){}
+    template<> inline void modifyaddtag<0,1>(int x,int fa){
+        a[x]+=add_tag[fa][1];
+        sum[x][0]+=siz[x][0]*add_tag[fa][1];sum[x][1]+=siz[x][1]*add_tag[fa][1];
+        tmax[x][0]+=add_tag[fa][1];tmax[x][1]+=add_tag[fa][1];
+        tmin[x][0]+=add_tag[fa][1];tmin[x][1]+=add_tag[fa][1];
+        add_tag[x][1]+=add_tag[fa][1];
+        add_tag[x][0]+=add_tag[fa][1];
+        return ;
+    }
+    template<> inline void modifyaddtag<1,1>(int x,int fa){
+        sum[x][1]+=add_tag[fa][1]*siz[x][1];
+        tmin[x][1]+=add_tag[fa][1];tmax[x][1]+=add_tag[fa][1];
+        add_tag[x][1]+=add_tag[fa][1];
+        return ;
+    }
+    template<> inline void modifyaddtag<0,0>(int x,int fa){
+        a[x]+=add_tag[fa][1];
+        sum[x][0]+=siz[x][0]*add_tag[fa][0];
+        tmax[x][0]+=add_tag[fa][0];
+        tmin[x][0]+=add_tag[fa][0];
+        add_tag[x][0]+=add_tag[fa][0];
+        return ;
+    }
+    template<const bool node_type> inline void pushdown(int x){}
+    template<> inline void pushdown<1>(int x){
         if(rtag[x]){
-            fn(ch[x][0]);
-            fn(ch[x][1]);
-            rtag[x]=0;
+            std::cerr<<"WTF1";
+            // rv(ch[x][0]);
+            // rv(ch[x][1]);
+            // rtag[x]=0;
+        }
+        if(cov_tag[x][1]!=inf){
+            if(ch[x][0])modifycovtag<1,1>(ch[x][0],x);
+            if(ch[x][1])modifycovtag<1,1>(ch[x][1],x);
+            if(ch[x][2])modifycovtag<0,1>(ch[x][2],x);
+            cov_tag[x][1]=inf;
+        }
+        if(add_tag[x][1]){
+            if(ch[x][0])modifyaddtag<1,1>(ch[x][0],x);
+            if(ch[x][1])modifyaddtag<1,1>(ch[x][1],x);
+            if(ch[x][2])modifyaddtag<0,1>(ch[x][2],x);
+            add_tag[x][1]=inf;
         }
         return ;
     }
-    template<const bool type > inline void reverse_pushdown(int x){
+    template<> inline void pushdown<0>(int x){
+        if(rtag[x]){
+            rv(ch[x][0]);
+            rv(ch[x][1]);
+            rtag[x]=0;
+        }
+        if(cov_tag[x][1]!=inf){
+            // if(ch[x][0])modifycovtag<0,1>(ch[x][0],x);
+            // if(ch[x][1])modifycovtag<0,1>(ch[x][1],x);
+            if(ch[x][2])modifycovtag<1,1>(ch[x][2],x);
+            cov_tag[x][1]=inf;
+        }
+        if(add_tag[x][1]){
+            // if(ch[x][0])modifyaddtag<0,1>(ch[x][0],x);
+            // if(ch[x][1])modifyaddtag<0,1>(ch[x][1],x);
+            if(ch[x][2])modifyaddtag<1,1>(ch[x][2],x);
+            add_tag[x][1]=inf;
+        }
+        if(cov_tag[x][0]!=inf){
+            if(ch[x][0])modifycovtag<0,0>(ch[x][0],x);
+            if(ch[x][1])modifycovtag<0,0>(ch[x][1],x);
+            cov_tag[x][0]=inf;
+        }
+        if(add_tag[x][0]){
+            if(ch[x][0])modifyaddtag<0,0>(ch[x][0],x);
+            if(ch[x][1])modifyaddtag<0,0>(ch[x][1],x);
+            add_tag[x][0]=0;
+        }
+        return ;
+    }
+    template<const bool node_type> inline void reverse_pushdown(int x){
         if(!isroot(x))reverse_pushdown<type >(fa[x]);
         pushdown<type >(x);
     }
-    template<const bool type > inline void spin(int x){
+    template<const bool node_type> inline void spin(int x){
         int f=fa[x],dir=chk(x),ff=fa[f];
         if(ff)ch[ff][ch[ff][2]==f?2:chk(f)]=x;//?
         if(ch[x][dir^1])fa[ch[x][dir^1]]=f;
@@ -108,7 +224,7 @@ namespace satt{
         fa[f]=x;fa[x]=ff;
         upsum<type >(f);upsum<type >(x);
     }
-    template<const bool type > inline void splay(int x,int goal=0){
+    template<const bool node_type> inline void splay(int x,int goal=0){
         reverse_pushdown<type >(x);
         int f=fa[x];
         while(!isroot(x)&&f!=goal){            
@@ -212,21 +328,33 @@ namespace satt{
         return ;
     }
 }using namespace satt;
-
+struct edge{
+    int u=0,v=0;
+}edg[maxn+10];
 int main(){
     ios::sync_with_stdio(false);
-    cin>>n>>m;
+    cin>>n>>q;
+    init();
+    for(int i{1};i<n;i++){
+        cin>>edg[i].u>>edg[i].v;
+    } 
     for(int i=1;i<=n;i++){
         cin>>a[i];
-        upsum<0 >(i);
+        upsum<0>(i);
+    }
+    for(auto&& [x,y]:edg){
+        link(x,y);
     }
     tot=n;
     int opt,x,y;
-    for(int i=1;i<=m;i++){
-        cin>>opt>>x>>y;
+    for(int i=1;i<=q;i++){
+        cin>>opt;
         if(opt==0){
-            split(x,y);
-            cout<<sum[y][0]<<"\n";
+            cin>>x>>y;
+            access(x);
+            if(ch[x][1]!=0)std::cerr<<"rsexist";
+            cov_tag[x][1]=y;
+
         }
         else if(opt==1){
             link(x,y);

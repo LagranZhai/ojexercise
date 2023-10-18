@@ -11,6 +11,8 @@ struct Edge{
 }edg[maxm];
 
 priority_queue<pair<int,int >,vector<pair<int,int > >,greater<pair<int,int > > > q;
+
+priority_queue<pair<int,int >,vector<pair<int,int > >,greater<pair<int,int > > > q;
 void dij(int s){
 	fill(dis+1,dis+n+1,0x3f7f3f7f);
 	dis[s]=0;
