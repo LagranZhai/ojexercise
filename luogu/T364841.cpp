@@ -31,20 +31,42 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=3e6;
+constexpr int maxn=3e5;
 #define int long long
-int n,p;
-int inv[maxn+10];
+int n,m;
+int a[maxn+100];
+bool solve(int b){
+    int s=0;
+    for(int i{1};i<=m;i++){
+        if(a[i]%b==0){
+            s+=a[i]/b;
+        }
+        else{
+            s+=a[i]/b+1ll;
+        }
+    }
+    if(s>n)return false;
+    else return true;
+}
 signed main(){
+    freopen("")
     ios::sync_with_stdio(false);
     cin.tie();
-    cin>>n>>p;
-    inv[1]=1;
-    cout<<inv[1]<<"\n";
-    for(int i{2};i<=n;i++){
-        inv[i]=p-p/i*inv[p%i]%p;
-        cout<<inv[i]<<"\n";
+    cin>>n>>m;
+    for(int i{1};i<=m;i++){
+        cin>>a[i];
     }
+    int l=1,r=n,mid=(l+r)/2;
+    while(l<r){
+        mid=(l+r)/2;
+        if(solve(mid)){
+            r=mid;
+        }
+        else{
+            l=mid+1;
+        }
+    }
+    cout<<l<<"\n";
     cout.flush();
     return 0;
 }

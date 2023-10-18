@@ -31,20 +31,23 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=3e6;
 #define int long long
-int n,p;
-int inv[maxn+10];
+constexpr int p=1e9+7;
+int qpow(int a,int b){
+    int c=1;
+    while(b>0){
+        if(b&1)c=(c*a)%p;
+        b>>=1;
+        a=(a*a)%p;
+    }
+    return c;
+}
 signed main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    cin>>n>>p;
-    inv[1]=1;
-    cout<<inv[1]<<"\n";
-    for(int i{2};i<=n;i++){
-        inv[i]=p-p/i*inv[p%i]%p;
-        cout<<inv[i]<<"\n";
-    }
+    int n,m;
+    cin>>n>>m;
+    cout<<qpow(((qpow(2ll,m)-1+p)%p),n)<<"\n";
     cout.flush();
     return 0;
 }

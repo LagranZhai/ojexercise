@@ -4,6 +4,7 @@
 #include<algorithm>
 #include<type_traits>
 #include<functional>
+#include<queue>
 using std::cin,std::ios,std::max,std::min;
 template<typename T>
 struct Myos{
@@ -31,19 +32,41 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=3e6;
+constexpr int maxn=1e6;
 #define int long long
-int n,p;
-int inv[maxn+10];
+int n;
+int read(){
+    int x=0,f=1;
+    char ch=getchar();
+    while(ch<'0'||ch>'9'){
+        if(ch=='-')f=-1;
+        ch=getchar();
+    }
+    while(ch>='0' && ch<='9')x=x*10+ch-'0',ch=getchar();
+    return x*f;
+}
 signed main(){
-    ios::sync_with_stdio(false);
-    cin.tie();
-    cin>>n>>p;
-    inv[1]=1;
-    cout<<inv[1]<<"\n";
-    for(int i{2};i<=n;i++){
-        inv[i]=p-p/i*inv[p%i]%p;
-        cout<<inv[i]<<"\n";
+    // ios::sync_with_stdio(false);
+    int T;
+    T=read();
+    while(T--){
+        n=read();
+        int ans=0;
+        int t;
+        std::priority_queue<int,std::vector<int >,std::less<int > > s;
+        for(int i{1};i<=n;i++){
+            t=read();
+            s.push(t);
+        }
+        int st,stt;
+        while(s.size()>1){
+            st=s.top();s.pop();
+            stt=s.top();s.pop();
+            ans+=stt;
+            s.push(st-stt);
+        }
+        cout<<ans<<"\n";
+        // if(sum%2==0)cout<<"odd\n";
     }
     cout.flush();
     return 0;
