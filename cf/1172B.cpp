@@ -31,20 +31,52 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=3e6;
-#define int long long
-int n,p;
-int inv[maxn+10];
-signed main(){
+constexpr int maxn=2e5,p=998244353;
+struct Edge{
+    int v{0},nxt{0};
+}edg[maxn*3];
+int head[maxn+100],cnt=0,deg[maxn+100];
+void addedge(int u_,int v_){
+    edg[++cnt].v=v_;
+    edg[cnt].nxt=head[u_];
+    head[u_]=cnt;
+}
+void dfs(int x,int f){
+    deg[x]=0;
+    for(int e{head[x]};e;e=edg[e].nxt){
+        int to=edg[e].v;
+        if(to!=f){
+            deg[x]++;
+            dfs(to,x);
+        }
+    }
+}
+int n;
+int fac[maxn+100];
+void init(int n){
+    fac[0]=1;
+    fac[1]=1;
+    for(int i{2};i<=n;i++){
+        fac[i]=(fac[i-1]*i)%p;
+    }
+}
+int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    cin>>n>>p;
-    inv[1]=1;
-    cout<<inv[1]<<"\n";
-    for(int i{2};i<=n;i++){
-        inv[i]=p-p/i*inv[p%i]%p;
-        cout<<inv[i]<<"\n";
+    cin>>n;
+    int u,v;
+    for(int i{1};i<n;i++){
+        cin>>u>>v;
+        addedge(u,v);
+        addedge(v,u);
     }
+    init(n);
+    dfs(1,0);
+    int ans=1;
+    for(int i{1};i<=n;i++){
+        ans=(ans*fac[deg[i]])%p;
+    }
+    cout<<(ans*n)%p<<"\n";
     cout.flush();
     return 0;
 }

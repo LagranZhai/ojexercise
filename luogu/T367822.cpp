@@ -31,20 +31,38 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=3e6;
-#define int long long
-int n,p;
-int inv[maxn+10];
-signed main(){
+constexpr int maxn=1e5;
+int fa[maxn+100],siz[maxn+100];
+bool flag[maxn+100];
+int findf(int x){
+    return (fa[x]==x)?x:(fa[x]=findf(fa[x]));
+}
+void merge(int x,int y){
+    x=findf(x);y=findf(y);
+    if(x==y)return ;
+    fa[x]=y;
+    siz[y]+=siz[x];
+    return ;
+}
+int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    cin>>n>>p;
-    inv[1]=1;
-    cout<<inv[1]<<"\n";
-    for(int i{2};i<=n;i++){
-        inv[i]=p-p/i*inv[p%i]%p;
-        cout<<inv[i]<<"\n";
+    int n;
+    cin>>n;
+    for(int i{1};i<=n;i++){
+        fa[i]=i;
+        siz[i]=1;
     }
+    int p;
+    int ans=n;
+    for(int i{1};i<=n;i++){
+        cin>>p;
+        merge(i,p);
+        ans-=siz[findf(i)];
+        siz[findf(i)]=0;
+        cout<<ans<<" ";
+    }
+
     cout.flush();
     return 0;
 }

@@ -31,19 +31,36 @@ template<> Myos<std::ostringstream>& Myos<std::ostringstream>::flush() {
 }
 //Myos<std::ostream&> cout{std::cout};
 Myos<std::ostringstream> cout{std::ostringstream()};
-constexpr int maxn=3e6;
-#define int long long
-int n,p;
-int inv[maxn+10];
-signed main(){
+constexpr int maxm=1e6;
+int prime[maxm+100];
+std::vector<int > p;
+void init(){
+    std::fill(prime,prime+maxm+100,1);
+    for(int i=2;i<=maxm;i++){
+        if(prime[i]){
+            p.push_back(i);
+        }
+        for(auto j:p){
+            if(1ll*i*j>maxm)break;
+            prime[j*i]=0;
+            if(j%i==0){
+                break;
+            }
+        }
+        prime[i]+=prime[i-1];
+    }
+}
+int main(){
     ios::sync_with_stdio(false);
     cin.tie();
-    cin>>n>>p;
-    inv[1]=1;
-    cout<<inv[1]<<"\n";
-    for(int i{2};i<=n;i++){
-        inv[i]=p-p/i*inv[p%i]%p;
-        cout<<inv[i]<<"\n";
+    int n,m;
+    cin>>n>>m;
+    init();
+    int x,y;
+    for(int i{1};i<=n;i++){
+        cin>>x>>y;
+        if(1<=x&&x<=y&&y<=m)cout<<prime[y]-prime[x-1]<<"\n";
+        else cout<<"Crossing the line\n";
     }
     cout.flush();
     return 0;
