@@ -9,3 +9,4 @@ template/ds/splayfunc.exe
 __pycache__/openai.cpython-310.pyc
 luogu/1198/1198.exe
 luogu/ojexercise.code-workspace
+*.exe

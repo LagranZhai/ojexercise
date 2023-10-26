@@ -8,27 +8,27 @@ int cnt=0;
 vector<int> v;
 struct Node{
 	int l,r,sum;
-}hjt[maxn*40];
+}hjy[maxn*40];
 inline int getid(int x){return lower_bound(v.begin(),v.end(),x)-v.begin()+1;}
 void insert(int cl,int cr,int pre,int& now,int p){
-	hjt[++cnt]=hjt[pre];
+	hjy[++cnt]=hjy[pre];
 	now=cnt;
-	hjt[now].sum++;
+	hjy[now].sum++;
 	if(cl==cr)return;
 	int mid=(cl+cr)>>1;
-	if(p<=mid)insert(cl,mid,hjt[pre].l,hjt[now].l,p);
-	else insert(mid+1,cr,hjt[pre].r,hjt[now].r,p);
+	if(p<=mid)insert(cl,mid,hjy[pre].l,hjy[now].l,p);
+	else insert(mid+1,cr,hjy[pre].r,hjy[now].r,p);
 }
 int query(int cl,int cr,int l,int r,int k){
 	if(cl==cr)return cl;
-	int siz=hjt[hjt[r].l].sum-hjt[hjt[l].l].sum;
+	int siz=hjy[hjy[r].l].sum-hjy[hjy[l].l].sum;
 	int mid=(cl+cr)>>1;
-	if(k<=siz)return query(cl,mid,hjt[l].l,hjt[r].l,k);
-	else return query(mid+1,cr,hjt[l].r,hjt[r].r,k-siz);
+	if(k<=siz)return query(cl,mid,hjy[l].l,hjy[r].l,k);
+	else return query(mid+1,cr,hjy[l].r,hjy[r].r,k-siz);
 }
 int main(){
 	ios::sync_with_stdio(false);
-	//freopen("hjttree.txt","r",stdin);
+	//freopen("hjytree.txt","r",stdin);
 	int n,m;
 	cin>>n>>m;
 	for(int i=0;i<n;i++){

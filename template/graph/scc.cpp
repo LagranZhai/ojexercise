@@ -1,4 +1,3 @@
-//luogu3627
 #include<bits/stdc++.h>
 using namespace std;
 const int maxn=5e5,maxm=5e5;
@@ -11,7 +10,6 @@ stack<int > s;
 struct Edge{
     int u,v,nxt,w;
 };
-//Graph graph1,graph2;
 struct Graph{
     int head[maxn+10],cnt=0,a[maxn+10];
     Edge edg[maxm+10];
@@ -32,17 +30,15 @@ struct Graph{
                 low[x]=min(low[x],low[to]);
             }
             else if(!scci[to]){
-                low[x]=min(low[x],dfn[to]);
+                low[x]=min(low[x],low[to]);
             }
         }
         if(dfn[x]==low[x]){
             ++scccnt;
             while(1){
                 scci[s.top()]=scccnt;
-                graph2.a[scccnt]+=a[s.top()];
-                graph2.isend[scccnt]|=isend[s.top()];
-                //scca[scccnt]+=a[s.top()];
-                //sccisend[scccnt]|=isend[s.top()];
+                scca[scccnt]+=a[s.top()];
+                sccisend[scccnt]|=isend[s.top()];
                 if(s.top()==x){
                     s.pop();
                     break;
@@ -98,10 +94,10 @@ int main(){
             ind[scci[v]]++;
         }
     }
-    // for(int i=1;i<=scccnt;i++){
-    //     graph2.a[i]=scca[i];
-    //     graph2.isend[i]=sccisend[i];
-    // }
+    for(int i=1;i<=scccnt;i++){
+        graph2.a[i]=scca[i];
+        graph2.isend[i]=sccisend[i];
+    }
     graph2.topo();
     int ans=0;
     for(int i=1;i<=scccnt;i++){

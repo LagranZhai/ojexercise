@@ -42,28 +42,23 @@ void dfs1(int x,int f){
         }
     }
 }
-int dfs2(int x,int f,int sum){
-    maxss[x]=sum-siz[x];
-    int minms=maxn*2;int minmsp=0;
+std::pair<int ,int > dfs2(int x,int f,int sum){
+    int maxsonsiz=sum-siz[x];
+    std::pair<int ,int > ct{maxn*2,0};
     for(int e{head[x]};e;e=edg[e].nxt){
         int to{edg[e].v};
         if(to!=f&&vis[to]==0){
-            int p=dfs2(to,x,sum);
-            maxss[x]=std::max(maxss[x],siz[to]);
-            if(maxss[p]<minms){
-                minms=maxss[p];
-                minmsp=p;
-            }
+            std::pair<int ,int > subct{dfs2(to,x,sum)};
+            maxsonsiz=std::max(maxsonsiz,siz[to]);
+            ct=std::min(ct,subct);
         }
     }
-    if(maxss[x]<minms){
-        minmsp=x;
-    }
-    return minmsp;
+    ct=std::min(ct,{maxsonsiz,x});
+    return ct;
 }
 int gc(int x,int f){
     dfs1(x,f);
-    return dfs2(x,f,siz[x]);
+    return dfs2(x,f,siz[x]).second;
 }
 bool ans[maxm*2];
 bool c[maxk+100];
@@ -138,7 +133,7 @@ int main(){
     for(int i{1};i<=m;i++){
         q[i]=read();
     }
-    maxss[0]=n;
+    // maxss[0]=n;
     solve(1,0);
     for(int i{1};i<=m;i++){
         if(ans[i])cout<<"AYE\n";
