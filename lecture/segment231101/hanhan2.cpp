@@ -5,26 +5,20 @@ constexpr int maxn=1e5;
 int a[maxn*2];
 int n,m;
 struct Data{
-    int sum{0},len{0};
-    Data operator+(Data A){
-        return {sum+A.sum,len+A.len};
-    }
-    static Data identity(){
-        return {0,0};
+    int sum{0},max{0},len{0};
+    Data merge(Data A){
+        return {sum+A.sum,std::max(A.max,max),len+A.len};
     }
 };
 struct Tag{
     int add{};
-    Tag operator+(Tag A){
+    Tag compose(Tag A){
         Tag B{add+A.add};
         return B;
     }
-    Data operator*(Data A){
-        Data B{add*A.len+A.sum,A.len};
+    Data apply(Data A){
+        Data B{add*A.len+A.sum,add+A.max,A.len};
         return B;
-    }
-    static Tag identity(){
-        return {0};
     }
 };
 struct dm{
@@ -34,35 +28,28 @@ struct dm{
 void pushdown(int p){
     // if(tree[p].t.a1!=0||tree[p].t.a2>inf||tree[p].t.a3>inf||tree[p].t.a4>inf){
     if(tree[p].t.add!=0){
-        tree[p*2].d=tree[p].t*tree[p*2].d;
-        tree[p*2].t=tree[p].t+tree[p*2].t;
-        tree[p*2+1].d=tree[p].t*tree[p*2+1].d;
-        tree[p*2+1].t=tree[p].t+tree[p*2+1].t;
-        // tree[p*2].d.apply(tree[p].t);
-        // tree[p*2].t.compose(tree[p].t);have[p*2]=1;
-        // tree[p*2+1].d.apply(tree[p].t);
-        // tree[p*2+1].t.compose(tree[p].t);have[p*2+1]=1;
-        tree[p].t=Tag::identity();
-        // have[p]=0;
+        tree[p*2].d=tree[p].t.apply(tree[p*2].d);
+        tree[p*2].t=tree[p].t.compose(tree[p*2].t);
+        tree[p*2+1].d=tree[p].t.apply(tree[p*2+1].d);
+        tree[p*2+1].t=tree[p].t.compose(tree[p*2+1].t);
+        tree[p].t={0};
     }
 }
 void build(int p,int cl,int cr){
-    tree[p].t=Tag::identity();
+    tree[p].t={0};
     if(cl==cr){
-        // tree[p].d.len=1;
-        tree[p].d={a[cl],1};
+        tree[p].d={a[cl],a[cl],1};
         return ;
     }
     int mid=(cl+cr)/2;
     build(p*2,cl,mid);
     build(p*2+1,mid+1,cr);
-    tree[p].d=tree[p*2].d+tree[p*2+1].d;
+    tree[p].d=tree[p*2].d.merge(tree[p*2+1].d);
 }
 void update(int p,int cl,int cr,int l,int r,Tag w){
     if(cl>=l&&cr<=r){
-        tree[p].d=w*tree[p].d;
-        tree[p].t=w+tree[p].t;
-        // have[p]=1;
+        tree[p].d=w.apply(tree[p].d);
+        tree[p].t=w.compose(tree[p].t);
         return ;
     }
     if(cl!=cr){
@@ -70,12 +57,12 @@ void update(int p,int cl,int cr,int l,int r,Tag w){
         int mid=(cl+cr)/2;
         if(l<=mid)update(p*2,cl,mid,l,r,w);
         if(r>mid)update(p*2+1,mid+1,cr,l,r,w);
-        tree[p].d=tree[p*2].d+tree[p*2+1].d;
+        tree[p].d=tree[p*2].d.merge(tree[p*2+1].d);
     }
 }
 void query(int p,int cl,int cr,int l,int r,Data& ans){
     if(cl>=l&&cr<=r){
-        ans=(ans+tree[p].d);
+        ans=(ans.merge(tree[p].d));
         return ;
     }
     if(cl!=cr){

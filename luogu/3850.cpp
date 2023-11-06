@@ -1,28 +1,29 @@
 #include<bits/stdc++.h>
 using std::cin,std::cout,std::ios,std::cerr;
 constexpr int maxn=1e5;
-int fa[maxn*2],ch[maxn*2][2],siz[maxn*2],val[maxn*2];
-bool rev[maxn*2];
-int reserv1,reserv2;
+int fa[maxn*2],ch[maxn*2][2],siz[maxn*2];
+std::string val[maxn*2];
+// bool rev[maxn*2];
+// int reserv1,reserv2;
 int rt{0},tot{0};
-int n,m;
-void apply(int x,bool flag){
-    if(flag){
-        std::swap(ch[x][0],ch[x][1]);
-        rev[x]^=flag;    
-    }
-}
-void pushdown(int x){
-    if(rev[x]){
-        if(ch[x][0]){
-            apply(ch[x][0],rev[x]);
-        }
-        if(ch[x][1]){
-            apply(ch[x][1],rev[x]);
-        }
-        rev[x]=0;
-    }
-}
+int n,m,q;
+// void apply(int x,bool flag){
+//     if(flag){
+//         std::swap(ch[x][0],ch[x][1]);
+//         rev[x]^=flag;    
+//     }
+// }
+// void pushdown(int x){
+//     if(rev[x]){
+//         if(ch[x][0]){
+//             apply(ch[x][0],rev[x]);
+//         }
+//         if(ch[x][1]){
+//             apply(ch[x][1],rev[x]);
+//         }
+//         rev[x]=0;
+//     }
+// }
 int chk(int x){
     return x==ch[fa[x]][1];
 }
@@ -37,12 +38,12 @@ void spin(int x){
     ch[x][dir^1]=f;
     pushup(f);pushup(x);
 }
-void pushdownall(int x){
-    if(fa[x]!=0)pushdownall(fa[x]);
-    pushdown(x);
-}
+// void pushdownall(int x){
+//     if(fa[x]!=0)pushdownall(fa[x]);
+//     pushdown(x);
+// }
 void splay(int x,int des=0){
-    pushdownall(x);
+    // pushdownall(x);
     int f{fa[x]};
     while(f!=des){
         if(fa[f]!=des)spin((chk(f)==chk(x))?f:x);
@@ -54,8 +55,9 @@ void splay(int x,int des=0){
 int kth(int k){
     int x{rt};
     while(1){
-        pushdown(x);
+        // pushdown(x);
         if(k<=siz[ch[x][0]]){
+            if(ch[x][0]==0)return x;
             x=ch[x][0];
         }
         else{
@@ -73,7 +75,7 @@ int expose(int x,int y){
     splay(y,x);
     return ch[y][chk(y)^1];
 }
-int ins(int cpos,int v){
+int ins(int cpos,std::string v){
     if(rt==0){
         rt=++tot;val[tot]=v;
         pushup(tot);
@@ -95,34 +97,40 @@ int ins(int cpos,int v){
     pushup(rt);pushup(tot);rt=tot;
     return tot;
 }
-void dfs(int x){
-    pushdown(x);
-    if(ch[x][0])dfs(ch[x][0]);
-    if(x!=reserv1&&reserv2!=x)cout<<val[x]<<" ";
-    if(ch[x][1])dfs(ch[x][1]);
-}
-void reverse(int l,int r){
-    apply(expose(kth(l),kth(r+2)),1);
-}
+// void dfs(int x){
+//     // pushdown(x);
+//     if(ch[x][0])dfs(ch[x][0]);
+//     if(x!=reserv1&&reserv2!=x)cout<<val[x]<<" ";
+//     if(ch[x][1])dfs(ch[x][1]);
+// }
+// void reverse(int l,int r){
+//     apply(expose(kth(l),kth(r+2)),1);
+// }
 int main(){
     ios::sync_with_stdio(false);cin.tie(nullptr);
-    cin>>n>>m;
-    int p,t;
-    reserv1=ins(1,114514);
+    cin>>n;
+    std::string t;
+    // reserv1=ins(1,114514);
     // std::cerr<<0;
-    reserv2=ins(1,114514);
+    // reserv2=ins(1,114514);
     // cerr<<rt;
     for(int i{1};i<=n;i++){
-        // cin>>t;
-        ins(i,i);
+        cin>>t;
+        ins(i-1,t);
     }
+    int p;
+    cin>>m;
     for(int i{1};i<=m;i++){
-        cin>>p>>t;
-        reverse(p,t);
+        cin>>t>>p;
+        ins(p,t);
     }
     // cerr<<rt;
-    dfs(rt);
-    cout<<std::endl;
+    cin>>q;
+    for(int i{1};i<=q;i++){
+        cin>>p;
+        cout<<val[kth(p+1)]<<"\n";
+    }
+    // cout<<std::endl;
     cout<<std::flush;
     return 0;
 }
