@@ -7,12 +7,12 @@ int sccrt[maxn+100],scccnt=0;
 vector<int > scc[maxn+100];
 int ind[maxn+100],outd[maxn+100];
 struct Edge{
-    int u=0,v=0,nxt=0;
+    int u=1,v=0,nxt=0;
 };
 stack<int > s;
 struct Graph{
-    int head[maxn+100],cnt=0;
-    Edge edg[maxm+100];
+    int head[maxn+100] = {0, 0},cnt=0;
+    Edge edg[maxm+100] = {0, 0};
     void addedge(int u,int v){
         edg[++cnt].u=u;
         edg[cnt].v=v;

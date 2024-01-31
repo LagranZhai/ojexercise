@@ -1,0 +1,18 @@
+{
+	"Print to conaole":{
+		"prefix": "qweer",    //在新建立的页面中输入C++就会有智能提示，Tab就自动生成好了
+		"body": [
+			"//P$TM_FILENAME_BASE",
+			"#include<bits/stdc++.h>",
+			"using std::cin,std::cout,std::ios,std::cerr;",
+			"#define int long long",
+			"signed main(){",
+			"    ios::sync_with_stdio(false);cin.tie(nullptr);",
+			"",
+			"    cout.flush();",
+			"    return 0;",
+			"}",
+		],
+		"description": "A cpp file template."   //用户输入后智能提示的内容（你可以用中文写“生成C++模板”）
+	}
+}

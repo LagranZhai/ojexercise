@@ -79,7 +79,7 @@ namespace satt{
         ch[f][ch_type]=x;
         return ;
     }
-    template<const bool node_type> inline void upsum(int x){}
+    template<const bool ndoe_type> inline void upsum(int x){}
     template<> inline void upsum<1>(int x){
         siz[x][1]=siz[ch[x][0]][1]+siz[ch[x][1]][1]+siz[ch[x][2]][1];
         sum[x][1]=sum[ch[x][0]][1]+sum[ch[x][1]][1]+sum[ch[x][2]][1];

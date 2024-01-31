@@ -1,47 +1,56 @@
-#include<iostream>
-#include<algorithm>
-#include<queue>
-using namespace std;
-const int maxn=1e5+5;
-const int maxm=2e5+5;
-int n,m,s,cnt=0,dis[maxn],head[maxn];
-bool visited[maxn];
+#include<bits/stdc++.h>
+using std::cin;
+using std::cout;
+using std::ios;
+constexpr int maxn=1e5,maxm=2e5;
+#define int long long
+int n,m,s;
 struct Edge{
-	int to,w,nxt;
-}edg[maxm];
-
-priority_queue<pair<int,int >,vector<pair<int,int > >,greater<pair<int,int > > > q;
-
-priority_queue<pair<int,int >,vector<pair<int,int > >,greater<pair<int,int > > > q;
-void dij(int s){
-	fill(dis+1,dis+n+1,0x3f7f3f7f);
+	int v,nxt,w;
+}edg[maxm*3];
+int head[maxn*2],cnt{0};
+void addedge(int u,int v,int w){
+	edg[++cnt]={v,head[u],w};
+	head[u]=cnt;
+}
+int dis[maxn*2];
+bool vis[maxn*2];
+struct Node{
+	int v,dis;
+};
+void dijkstra(int s){
+	std::fill(dis,dis+maxn*2,std::numeric_limits<int>::max()>>2);
+	auto cmp{[](const Node &a,const Node &b){return a.dis>b.dis;}};
+	std::priority_queue<Node,std::vector<Node> ,decltype(cmp)> q(cmp);
 	dis[s]=0;
-	q.push(make_pair(0,s));
+	q.push({s,0});
 	while(!q.empty()){
-		int cur=q.top().second;
+		int cur{q.top().v};
 		q.pop();
-		if(visited[cur])continue;
-		visited[cur]=1;
-		for(int e=head[cur];e;e=edg[e].nxt){
-			dis[edg[e].to]=min(dis[edg[e].to],dis[cur]+edg[e].w);
-			if(!visited[edg[e].to])q.push(make_pair(dis[edg[e].to],edg[e].to));
+		if(vis[cur])continue;
+		vis[cur]=1;
+		for(int e{head[cur]};e;e=edg[e].nxt){
+			int to{edg[e].v};
+			if(!vis[to]&&dis[to]>dis[cur]+edg[e].w){
+				dis[to]=dis[cur]+edg[e].w;
+				q.push({to,dis[to]});
+			}
 		}
 	}
 }
-int main(){
+signed main(){
 	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
 	cin>>n>>m>>s;
 	int u,v,w;
-	for(int i=0;i<m;i++){
+	for(int i{1};i<=m;i++){
 		cin>>u>>v>>w;
-		edg[++cnt].to=v;
-		edg[cnt].w=w;
-		edg[cnt].nxt=head[u];
-		head[u]=cnt;
+		addedge(u,v,w);
 	}
-	dij(s);
-	for(int i=1;i<=n;i++){
-		cout<<dis[i]<<' ';
+	dijkstra(s);
+	for(int i{1};i<=n;i++){
+		cout<<dis[i]<<" ";
 	}
+	cout.flush();
 	return 0;
-} 
+}
