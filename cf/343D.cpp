@@ -23,7 +23,7 @@ void dfs1(int x,int f){
         if(to!=f){
             dfs1(to,x);
             siz[x]+=siz[to];
-            if(siz[to]>siz[hson[x]])hson[x]=to;
+            if(siz[to]>siz[hson[x]])[x]=to;
         }
     }
 }
