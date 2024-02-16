@@ -42,14 +42,14 @@ constexpr int maxn=2e5;
 int n,q;
 namespace satt{
     //0 compress,1 rake
-    constexpr int inf=std::numeric_limits<int >::min();
-    constexpr int sup=std::numeric_limits<int >::max();
+    constexpr int inf=std::numeric_limits<int>::min();
+    constexpr int sup=std::numeric_limits<int>::max();
     int a[maxn+10];
     int ch[maxn+10][3],fa[maxn+10],sum[maxn+10][2],tmin[maxn+10][2],tmax[maxn+10][2],tot=0;
     int add_tag[maxn+10][2],cov_tag[maxn+10][2];
     int siz[maxn+10][2];
     bool rtag[maxn+10];
-    std::stack<int > st;
+    std::stack<int> st;
     void init(){
         std::fill(cov_tag[0],cov_tag[0]+2*(maxn+10),inf);
         std::fill(tmin[0],tmin[0]+(maxn+10)*2,sup);
@@ -79,23 +79,23 @@ namespace satt{
         ch[f][ch_type]=x;
         return ;
     }
-    template<const bool ndoe_type> inline void upsum(int x){}
+    template<const bool node_type> inline void upsum(int x){}
     template<> inline void upsum<1>(int x){
         siz[x][1]=siz[ch[x][0]][1]+siz[ch[x][1]][1]+siz[ch[x][2]][1];
         sum[x][1]=sum[ch[x][0]][1]+sum[ch[x][1]][1]+sum[ch[x][2]][1];
-        tmin[x][1]=min(min(tmin[ch[x][0]][1],tmin[ch[x][1]][1]),tmin[ch[x][2]][1]);
-        tmax[x][1]=max(max(tmax[ch[x][0]][1],tmax[ch[x][1]][1]),tmax[ch[x][2]][1]);
+        tmin[x][1]=min({tmin[ch[x][0]][1],tmin[ch[x][1]][1],tmin[ch[x][2]][1]});
+        tmax[x][1]=max({tmax[ch[x][0]][1],tmax[ch[x][1]][1],tmax[ch[x][2]][1]});
         return ;
     }
     template<> inline void upsum<0>(int x){
-        siz[x][0]=siz[ch[x][0]][0]+siz[ch[x][1]][0]+1;
-        sum[x][0]=sum[ch[x][0]][0]+sum[ch[x][1]][0]+a[x];
-        tmin[x][0]=min(min(tmin[ch[x][0]][0],tmin[ch[x][1]][0]),a[x]);
-        tmax[x][0]=max(max(tmax[ch[x][0]][0],tmax[ch[x][1]][0]),a[x]);
         siz[x][1]=siz[ch[x][0]][1]+siz[ch[x][1]][1]+siz[ch[x][2]][1]+1;
         sum[x][1]=sum[ch[x][0]][1]+sum[ch[x][1]][1]+sum[ch[x][2]][1]+a[x];
         tmin[x][1]=min(min(tmin[ch[x][0]][1],tmin[ch[x][1]][1]),min(a[x],tmin[ch[x][2]][1]));
         tmax[x][1]=max(max(tmax[ch[x][0]][1],tmax[ch[x][1]][1]),max(a[x],tmax[ch[x][2]][1]));
+        siz[x][0]=siz[ch[x][0]][0]+siz[ch[x][1]][0]+1;
+        sum[x][0]=sum[ch[x][0]][0]+sum[ch[x][1]][0]+a[x];
+        tmin[x][0]=min(min(tmin[ch[x][0]][0],tmin[ch[x][1]][0]),a[x]);
+        tmax[x][0]=max(max(tmax[ch[x][0]][0],tmax[ch[x][1]][0]),a[x]);
         return ;
     }
     inline void rv(int x){
@@ -222,14 +222,14 @@ namespace satt{
         if(ch[x][dir^1])fa[ch[x][dir^1]]=f;
         ch[f][dir]=ch[x][dir^1];ch[x][dir^1]=f;
         fa[f]=x;fa[x]=ff;
-        upsum<type >(f);upsum<type >(x);
+        upsum<type>(f);upsum<type>(x);
     }
     template<const bool node_type> inline void splay(int x,int goal=0){
         reverse_pushdown<type >(x);
         int f=fa[x];
         while(!isroot(x)&&f!=goal){            
             if(!isroot(f)&&fa[f]!=goal)spin<type >(chk(f)==chk(x)?f:x);
-            spin<type >(x);
+            spin<type>(x);
             f=fa[x];
         }
         // for(int y;y=fa[x],(!isroot(x))&&y!=goal;spin(x,type)){
@@ -241,16 +241,16 @@ namespace satt{
         setfa(ch[x][2],fa[x],1);
         if(ch[x][0]){
             int p=ch[x][0];
-            pushdown<1 >(p);
+            pushdown<1>(p);
             while(ch[p][1]){
                 p=ch[p][1];
-                pushdown<1 >(p);
+                pushdown<1>(p);
             }
-            splay<1 >(p,x);
+            splay<1>(p,x);
             setfa(ch[x][1],p,1);
             setfa(p,fa[x],2);
-            upsum<1 >(p);
-            upsum<0 >(fa[x]);
+            upsum<1>(p);
+            upsum<0>(fa[x]);
         }
         else setfa(ch[x][1],fa[x],2);
         clear(x);
@@ -258,19 +258,19 @@ namespace satt{
     void splice(int x){
         splay<1 >(x);
         int y=fa[x];
-        splay<0 >(y);
-        pushdown<1 >(x);
+        splay<0>(y);
+        pushdown<1>(x);
         if(ch[y][1]){
             swap(fa[ch[x][2]],fa[ch[y][1]]);
             swap(ch[x][2],ch[y][1]);
-            upsum<1 >(x);
+            upsum<1>(x);
         }
         else del(x);
-        upsum<0 >(ch[y][1]);
-        upsum<0 >(y);
+        upsum<0>(ch[y][1]);
+        upsum<0>(y);
     }
     void access(int x){
-        splay<0 >(x);
+        splay<0>(x);
         int cur=x;
         if(ch[x][1]){
             int y=newnode();
@@ -278,8 +278,8 @@ namespace satt{
             setfa(ch[x][1],y,2);
             ch[x][1]=0;
             setfa(y,x,2);
-            upsum<1 >(y);
-            upsum<0 >(x);
+            upsum<1>(y);
+            upsum<0>(x);
         }
         while(fa[x]){
             splice(fa[x]);
@@ -290,18 +290,18 @@ namespace satt{
     }
     void makeroot(int x){
         access(x);
-        splay<0 >(x);
+        splay<0>(x);
         fn(x);
     }
     int findroot(int x){
         access(x);
-        splay<0 >(x);
-        pushdown<0 >(x);
+        splay<0>(x);
+        pushdown<0>(x);
         while(ch[x][0]){
             x=ch[x][0];
-            pushdown<0 >(x);
+            pushdown<0>(x);
         }
-        splay<0 >(x);
+        splay<0>(x);
         return x;
     }
     void split(int x,int y){
