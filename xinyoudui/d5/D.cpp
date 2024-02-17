@@ -78,11 +78,11 @@ namespace hpd{
         }
     }
     int getans(int x,int s){
-        while(top[x]!=n&&a[fa[top[x]]]>=s){
+        while(top[x]!=n&&a[fa[top[x]]]>s){
             x=fa[top[x]];
         }
         auto pos=std::lower_bound(rnk+dfn[top[x]],rnk+dfn[x]+1,s,[](const int &A,const int &B){
-            return a[A]<B;
+            return a[A]<=B;
         });
         return val[*pos];
     }
@@ -106,8 +106,8 @@ namespace dsu{
             if(fx!=fy){
                 hpd::n++;
                 fa[fx]=fa[fy]=hpd::n;
-                hpd::a[n]=edg[i].a;
-                hpd::g[n].push_back(fx);hpd::g[n].push_back(fy);
+                hpd::a[hpd::n]=edg[i].a;
+                hpd::g[hpd::n].push_back(fx);hpd::g[hpd::n].push_back(fy);
                 if(hpd::n==2*n-1)break;
             }
         }
@@ -142,6 +142,6 @@ signed main(){
         cnt=0;
         std::fill(head,head+n+1,0);
     }
-    cout.flush();
+    cout.flush(); 
     return 0;
 }
