@@ -2,7 +2,7 @@
 #include<bits/stdc++.h>
 using std::cin,std::cout,std::ios,std::cerr;
 #define int long long
-constexpr int maxn=1e6;
+constexpr int maxn=2e6;
 int n,m;
 struct Edge{
     int v,nxt,l,a,u;
@@ -77,14 +77,17 @@ namespace hpd{
             }
         }
     }
-    int getans(int x,int s){
-        while(top[x]!=n&&a[fa[top[x]]]>s){
+    int getans(int x,int y){
+        while(top[x]!=top[y]){
+            if(dep[top[x]]<dep[top[y]]){
+                std::swap(x,y);
+            }
             x=fa[top[x]];
         }
-        auto pos=std::lower_bound(rnk+dfn[top[x]],rnk+dfn[x]+1,s,[](const int &A,const int &B){
-            return a[A]<=B;
-        });
-        return val[*pos];
+        if(dep[x]<dep[y]){
+            std::swap(x,y);
+        }
+        return a[y];
     }
 }
 namespace dsu{
@@ -99,7 +102,7 @@ namespace dsu{
         std::fill(hpd::g,hpd::g+n*2,std::vector<int>{});
         std::fill(hpd::a,hpd::a+n*2,0);
         hpd::n=n;
-        std::sort(edg+1,edg+cnt+1,[](const Edge& A,const Edge& B){return A.a>B.a;});
+        std::sort(edg+1,edg+cnt+1,[](const Edge& A,const Edge& B){return A.a<B.a;});
         for(int i{1};i<=cnt;i++){
             int u{edg[i].u},v{edg[i].v};
             int fx{getf(u)},fy{getf(v)};
@@ -115,28 +118,26 @@ namespace dsu{
 }
 signed main(){
     ios::sync_with_stdio(false);cin.tie(nullptr);
-    int T;cin>>T;
+    int T=1;
     while(T--){
         cin>>n>>m;
-        int u,v,l,a;
+        int u,v,l=0,a;
         for(int i{};i<m;i++){
-            cin>>u>>v>>l>>a;
+            cin>>u>>v>>a;
             addedge(u,v,l,a);
             addedge(v,u,l,a);
         }
-        dijkstra();
+        // dijkstra();
         dsu::kruskal();
         hpd::init();
         hpd::dfs1(hpd::n,0);
         hpd::dfs2(hpd::n,hpd::n);
-        int Q,K,S;
-        cin>>Q>>K>>S;
-        l=0;
+        int Q;
+        cin>>Q;
         for(int i{};i<Q;i++){
             cin>>u>>v;
-            u=(u+K*l-1)%n+1;
-            v=(v+K*l)%(S+1);
-            cout<<(l=hpd::getans(u,v))<<"\n";
+            if(u==v)cout<<0<<"\n";
+            else cout<<hpd::getans(u,v)<<"\n";
         }
         std::fill(edg,edg+cnt+1,Edge{});
         cnt=0;
