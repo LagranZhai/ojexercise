@@ -142,6 +142,6 @@ signed main(){
         cnt=0;
         std::fill(head,head+n+1,0);
     }
-    cout.flush();
+    cout.flush(); 
     return 0;
 }
