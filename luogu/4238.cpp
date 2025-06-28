@@ -5,7 +5,6 @@ using std::cin,std::cout,std::ios,std::cerr;
 constexpr int maxn=4e6,p=998244353,g=3;
 int n,m;
 int a[maxn],b[maxn],tmp[maxn];
-int r[maxn];
 int qpow(int a,int b){
     int c{1};
     while(b){
@@ -18,13 +17,18 @@ int qpow(int a,int b){
 const int invg{qpow(g,p-2)};
 int lbin(int x){
     int c{0},b{1};
-    while(b<=x){
+    while(b<x){
         c++;b<<=1;
     }
     return c;
 }
 void fft(int *a,int l,int opt){
-    // int l{1<<(lbin(len))};
+    int length=lbin(l);
+    int r[maxn]{};
+    for(int i{};i<l;i++){
+        r[i]=(r[i>>1]>>1)|((i%2)<<(length-1));
+        // cout<<r[i]<<"\n";
+    }
     for(int i{};i<l;i++){
         if(i<r[i])std::swap(a[i],a[r[i]]);
     }
@@ -57,15 +61,12 @@ signed main(){
     for(int i{};i<n;i++)cin>>a[i];
     b[0]=qpow(a[0],p-2);
     int length=lbin(n),limits{1<<length};
-    for(int i{};i<limits;i++){
-        r[i]=(r[i>>1]>>1)|((i%2)<<(length-1));
-        // cout<<r[i]<<"\n";
-    }
     fft(a,limits,1);
     int curn{1};
     while(curn<=n){
+        curn*=2;
+        fft(b,curn,1);
         polycmp(tmp,b,curn);
-        // fft(b,curn,1);
         for(int i{};i<curn;i++){
             b[i]=b[i]*a[i*(limits/curn)];
         }
@@ -78,8 +79,7 @@ signed main(){
         for(int i{};i<curn;i++){
             b[i]=b[i]*tmp[i]%p;
         }
-        // fft(b,curn,-1);
-        curn*=2;
+        fft(b,curn,-1);
     }
     for(int i{};i<n;i++){
         cout<<a[i]<<" ";

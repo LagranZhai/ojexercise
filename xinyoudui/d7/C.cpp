@@ -51,7 +51,11 @@ signed main(){
     // cout<<dis[i]<<"\n";
 
     // }
-    cout<<dis[k*n+t]<<"\n";
+    int ans{std::numeric_limits<int>::max()};
+    for(int i{};i<=k;i++){
+        ans=std::min(ans,dis[i*n+t]);
+    }
+    cout<<ans<<"\n";
     cout.flush();
     return 0;
 }
