@@ -2,15 +2,15 @@
 #include<iostream>
 #include<algorithm>
 using std::cin;using std::cout;using std::ios;using std::cerr;
-// #define int long long
-const int maxn=2e5+100,maxk=210,p=1000000007;
+#define int long long
+const int maxn=2e6+100,maxk=210,p=998244353;
 int a[maxn],b[maxn];
 int c[maxk][maxk];
 int fac[maxn],inv[maxn];
 int qpow(int x,int y){
     int res{1};
     while(y>0){
-        if(y&1)res=1ll*res*x%p;
+        if(y&1ll)res=1ll*res*x%p;
         x=1ll*x*x%p;
         y>>=1ll;
     }
@@ -94,7 +94,7 @@ void write(int x){
 	return;
 }
 signed main(){
-    freopen("B.in","r",stdin);
+    // freopen("B.in","r",stdin);
     // ios::sync_with_stdio(false);cin.tie(nullptr);
     int T;cin>>T;
     fac[1]=1;fac[0]=1;
@@ -102,22 +102,27 @@ signed main(){
         fac[i]=1ll*fac[i-1]*i%p;
     }
     inv[maxn-1]=qpow(fac[maxn-1],p-2);
-    for(int i{maxn-2};i>=1;i--){
+    for(int i{maxn-2};i>=0;i--){
         inv[i]=1ll*inv[i+1]*(i+1)%p;
     }
     while(T--){
         int n,k;
         n=read();k=read();
-        for(int i{1};i<=k;i++)a[i]=read();
-        for(int i{1};i<=k;i++)b[i]=read();
+        for(int i{1};i<=k;i++){
+            a[i]=read();
+            b[i]=read();
+        }
+        // for(int i{1};i<=k;i++)b[i]=read();
         for(int i{1};i<=k;i++){
             for(int j{1};j<=k;j++){
                 if(b[j]<a[i])c[i][j]=0;
                 else c[i][j]=chose(n-1+b[j]-a[i],n-1);
+                // cout<<c[i][j]<<" ";
             }
+            // cout<<"\n";
         }
         write(det(k));
-        puts("\n");
+        puts("");
     }
     cout.flush();
     return 0;
