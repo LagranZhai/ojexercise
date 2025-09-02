@@ -2,7 +2,7 @@
 using namespace std;
 typedef long long ll;
 const int maxn=2e5+7;
-const ll mod=1000000007;
+const ll mod=998244353;
 int inv[maxn],e[107],s[107],fac[maxn];
 ll a[107][107];
 ll det(int n) {
@@ -48,12 +48,14 @@ int main( ) {
     while(t--) {
         int n,k;
         cin>>n>>k;
-        for(int i=0;i<k;i++) cin>>s[i];
-        for(int i=0;i<k;i++) cin>>e[i];
+        for(int i=0;i<k;i++) cin>>s[i]>>e[i];
         for(int i=0;i<k;i++) {
             for(int j=0;j<k;j++) {
                 a[i][j]=C(n-1+e[j]-s[i],e[j]-s[i]);
+                cout<<a[i][j]<<" ";
             }
+                cout<<"\n";
+
         }
         cout<<det(k)<<endl;
     }
